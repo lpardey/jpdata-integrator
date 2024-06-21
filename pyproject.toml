@@ -4,15 +4,16 @@ version = "0.1.0"
 description = "Data Extraction Script"
 requires-python = ">=3.12.0"
 dependencies = [
-    "tortoise-orm[asyncpg]",
+    "aiohttp[speedups]",
+    "fastapi[all]",
+    "orjson",
     "pydantic",
     "pydantic_settings",
-    "beautifulsoup4",
-    "requests",
+    "tortoise-orm[asyncpg]",
 ]
 
 [project.optional-dependencies]
-dev = ["ruff", "mypy", "pip-tools", "pytest"]
+dev = ["ruff", "mypy", "pip-tools", "pytest", "pytest-asyncio"]
 
 [project.urls]
 Repository = "https://github.com/lpardey/prueba-tusdatos"
@@ -62,3 +63,7 @@ no_implicit_reexport = false
 strict_equality = true
 
 exclude = ['^build/.*', '^tests/.*']
+
+[tool.pytest.ini_options]
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+asyncio_mode = "auto"

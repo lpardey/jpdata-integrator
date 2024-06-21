@@ -1,0 +1,2 @@
+class ProcesosJudicialesClientException(Exception):
+    pass
