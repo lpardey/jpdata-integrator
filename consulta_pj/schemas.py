@@ -62,7 +62,7 @@ class CausasResponse(BaseModel):
 class LitiganteSchema(BaseModel):
     tipoLitigante: str
     nombresLitigante: str
-    representadoPor: str
+    representadoPor: str | None
     idLitigante: int
 
 
@@ -72,8 +72,8 @@ class IncidenteJudicaturaSchema(BaseModel):
     idJudicaturaDestino: str
     fechaCrea: datetime
     incidente: int
-    lstLitiganteActor: list[LitiganteSchema]
-    lstLitiganteDemandado: list[LitiganteSchema]
+    lstLitiganteActor: list[LitiganteSchema] | None
+    lstLitiganteDemandado: list[LitiganteSchema] | None
     litiganteActor: str | None = None
     litiganteDemandado: str | None = None
 
@@ -116,7 +116,7 @@ class ActuacionJudicial(BaseModel):
     codigo: int
     idJudicatura: str
     idJuicio: str
-    fecha: str
+    fecha: datetime
     tipo: str
     actividad: str
     visible: str
