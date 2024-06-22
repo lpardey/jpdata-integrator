@@ -5,6 +5,7 @@ description = "Data Extraction Script"
 requires-python = ">=3.12.0"
 dependencies = [
     "aiohttp[speedups]",
+    "backoff",
     "fastapi[all]",
     "orjson",
     "pydantic",

@@ -6,7 +6,6 @@ import orjson
 from .exceptions import ProcesosJudicialesClientException
 from .schemas import (
     ActuacionesJudicialesRequest,
-    CausaActor,
     CausasRequest,
     CausasResponse,
     CausasSchema,
@@ -79,44 +78,28 @@ class ProcesosJudicialesClient(WebClient):
         pagination = {"page": 1, "size": total_causas}
         url = f"{self.API_URL}{endpoint}?{urlencode(pagination)}"
         data = CausasRequest(**request.model_dump(), **pagination)
-
         async with self.session.post(url, data=data.model_dump_json()) as response:
             raw_response_data = await response.text()
             response_data = orjson.loads(raw_response_data)
             causas_actor = [CausasResponse(**causa) for causa in response_data]
             return causas_actor
 
-    async def get_causas_actor(self, cedulaActor: str) -> list[CausasResponse]:
-        endpoint = "buscarCausas"
-        total_causas = await self.get_contar_causas(cedulaActor)
-        pagination = {"page": 1, "size": total_causas}
-        url = f"{self.API_URL}{endpoint}?{urlencode(pagination)}"
-        data = CausasRequest(actor=CausaActor(cedulaActor=cedulaActor), **pagination)
-
-        async with self.session.post(url, data=data.model_dump_json()) as response:
+    async def get_informacion_juicio(self, proceso: str) -> GetInformacionJuicioResponse:
+        endpoint = f"getInformacionJuicio/{proceso}"
+        url = f"{self.API_URL}{endpoint}"
+        async with self.session.get(url) as response:
             raw_response_data = await response.text()
             response_data = orjson.loads(raw_response_data)
-            causas_actor = [CausasResponse(**causa) for causa in response_data]
-            return causas_actor
+            return GetInformacionJuicioResponse(causas=response_data)
 
     async def get_incidente_judicatura(self, proceso: str) -> GetIncidenteJudicaturaResponse:
         endpoint = f"getIncidenteJudicatura/{proceso}"
         api_url = "https://api.funcionjudicial.gob.ec/EXPEL-CONSULTA-CAUSAS-CLEX-SERVICE/api/consulta-causas-clex/informacion/"
         url = f"{api_url}{endpoint}"
-
         async with self.session.get(url) as response:
             raw_response_data = await response.text()
             response_data = orjson.loads(raw_response_data)
             return GetIncidenteJudicaturaResponse(incidentesJudicaturas=response_data)
-
-    async def get_informacion_juicio(self, proceso: str) -> GetInformacionJuicioResponse:
-        endpoint = f"getInformacionJuicio/{proceso}"
-        url = f"{self.API_URL}{endpoint}"
-
-        async with self.session.get(url) as response:
-            raw_response_data = await response.text()
-            response_data = orjson.loads(raw_response_data)
-            return GetInformacionJuicioResponse(causas=response_data)
 
     async def get_existe_ingreso_directo(
         self, request: GetExisteIngresoDirectoRequest
@@ -124,7 +107,6 @@ class ProcesosJudicialesClient(WebClient):
         endpoint = "existeIngresoDirecto"
         api_url = "https://api.funcionjudicial.gob.ec/EXPEL-CONSULTA-CAUSAS-CLEX-SERVICE/api/consulta-causas-clex/informacion/"
         url = f"{api_url}{endpoint}"
-
         async with self.session.post(url, data=request.model_dump_json()) as response:
             raw_response_data = await response.text()
             response_data = GetExisteIngresoDirectoResponse(**orjson.loads(raw_response_data))
@@ -135,7 +117,6 @@ class ProcesosJudicialesClient(WebClient):
     ) -> GetActuacionesJudicialesResponse:
         endpoint = "actuacionesJudiciales"
         url = f"{self.API_URL}{endpoint}"
-
         async with self.session.post(url, data=request.model_dump_json()) as response:
             raw_response_data = await response.text()
             response_data = orjson.loads(raw_response_data)
