@@ -3,6 +3,16 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
+class ActuacionesRequest(BaseModel):
+    aplicativo: str = "web"
+    idIncidenteJudicatura: int
+    idJudicatura: str
+    idJuicio: str
+    idMovimientoJuicioIncidente: int
+    incidente: int
+    nombreJudicatura: str
+
+
 class CausaActor(BaseModel):
     cedulaActor: str = ""
     nombreActor: str = ""
@@ -18,7 +28,7 @@ class PaginatedRequest(BaseModel):
     size: int = 10
 
 
-class CausasSchema(BaseModel):
+class CausasRequest(BaseModel):
     numeroCausa: str = ""
     actor: CausaActor = CausaActor()
     demandado: CausaDemandado = CausaDemandado()
@@ -27,16 +37,15 @@ class CausasSchema(BaseModel):
     recaptcha: str = "verdad"
 
 
-class CausasRequest(CausasSchema, PaginatedRequest):
+class CausasRequestBody(CausasRequest, PaginatedRequest):
     pass
 
 
-class ContarCausasRequest(CausasSchema):
+class ContarCausasRequest(CausasRequest):
     pass
 
 
 class CausasResponse(BaseModel):
-    id: int
     idJuicio: str
     estadoActual: str | None = None
     idMateria: int | None = None
@@ -59,60 +68,7 @@ class CausasResponse(BaseModel):
     iedocumentoAdjunto: str | None = None
 
 
-class LitiganteSchema(BaseModel):
-    tipoLitigante: str
-    nombresLitigante: str
-    representadoPor: str | None
-    idLitigante: int
-
-
-class IncidenteJudicaturaSchema(BaseModel):
-    idIncidenteJudicatura: int
-    idMovimientoJuicioIncidente: int
-    idJudicaturaDestino: str
-    fechaCrea: datetime
-    incidente: int
-    lstLitiganteActor: list[LitiganteSchema] | None
-    lstLitiganteDemandado: list[LitiganteSchema] | None
-    litiganteActor: str | None = None
-    litiganteDemandado: str | None = None
-
-
-class JudicaturaSchema(BaseModel):
-    idJudicatura: str
-    nombreJudicatura: str
-    ciudad: str
-    lstIncidenteJudicatura: list[IncidenteJudicaturaSchema]
-
-
-class GetIncidenteJudicaturaResponse(BaseModel):
-    incidentesJudicaturas: list[JudicaturaSchema]
-
-
-class GetInformacionJuicioResponse(BaseModel):
-    causas: list[CausasResponse]
-
-
-class GetExisteIngresoDirectoRequest(BaseModel):
-    idJuicio: str
-    idMovimientoJuicioIncidente: int
-
-
-class GetExisteIngresoDirectoResponse(BaseModel):
-    ingresado: str
-
-
-class ActuacionesJudicialesRequest(BaseModel):
-    aplicativo: str = "web"
-    idIncidenteJudicatura: int
-    idJudicatura: str
-    idJuicio: str
-    idMovimientoJuicioIncidente: int
-    incidente: int
-    nombreJudicatura: str
-
-
-class ActuacionJudicial(BaseModel):
+class Actuacion(BaseModel):
     codigo: int
     idJudicatura: str
     idJuicio: str
@@ -132,5 +88,53 @@ class ActuacionJudicial(BaseModel):
     idTablaReferencia: str
 
 
-class GetActuacionesJudicialesResponse(BaseModel):
-    actuaciones_judiciales: list[ActuacionJudicial]
+class ActuacionesResponse(BaseModel):
+    actuaciones: list[Actuacion]
+
+
+class JudicaturaSchema(BaseModel):
+    idJudicatura: str
+    nombreJudicatura: str
+    ciudad: str
+
+
+class LitiganteSchema(BaseModel):
+    idLitigante: int
+    tipoLitigante: str
+    nombresLitigante: str
+    representadoPor: str | None
+
+
+class IncidenteSchema(BaseModel):
+    incidente: int
+    idIncidenteJudicatura: int
+    idMovimientoJuicioIncidente: int
+    idJudicaturaDestino: str
+    fechaCrea: datetime
+    lstLitiganteActor: list[LitiganteSchema] | None
+    lstLitiganteDemandado: list[LitiganteSchema] | None
+    litiganteActor: str | None = None
+    litiganteDemandado: str | None = None
+
+
+class MovimientoSchema(JudicaturaSchema):
+    lstIncidenteJudicatura: list[IncidenteSchema]
+
+
+class MovimientosResponse(BaseModel):
+    movimientos: list[MovimientoSchema]
+
+
+def get_actuaciones_request(
+    idJuicio: str,
+    incidente: IncidenteSchema,
+    movimiento: MovimientoSchema,
+) -> ActuacionesRequest:
+    return ActuacionesRequest(
+        idIncidenteJudicatura=incidente.idIncidenteJudicatura,
+        idJudicatura=movimiento.idJudicatura,
+        idJuicio=idJuicio,
+        idMovimientoJuicioIncidente=incidente.idMovimientoJuicioIncidente,
+        incidente=incidente.incidente,
+        nombreJudicatura=movimiento.nombreJudicatura,
+    )

@@ -1,136 +1,109 @@
 import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
+from fastapi.openapi.models import Example
 from tortoise.contrib.fastapi import register_tortoise
 
-from . import crawler
-from .client import ProcesosJudicialesClient
-from .schemas import (
-    ActuacionesJudicialesRequest,
-    CausaActor,
-    CausaDemandado,
-    CausasSchema,
-    GetExisteIngresoDirectoRequest,
+from . import handler
+from .crawler import LitiganteTipo
+from .db_service import DBService
+from .handler import ProcessResponse
+from .models import (
+    Actuacion,
+    Actuacion_Pydantic,
+    Causa,
+    Causa_Pydantic,
+    Implicado,
+    Incidente,
+    Litigante,
+    Movimiento,
+    Movimiento_Pydantic,
 )
 
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI()
+
+ACTORES_EXAMPLES: dict[str, Example] = {
+    "0968599020001": Example(value="0968599020001"),
+    "0992339411001": Example(value="0992339411001"),
+    "1722218474": Example(value="1722218474"),
+}
+DEMANDADOS_EXAMPLES = {"1791251237001": {"value": "1791251237001"}, "0968599020001": {"value": "0968599020001"}}
+PROCESOS_EXAMPLES = {"Actor": {"value": "02331202200019"}, "Demandado": {"value": "17230202115775"}}
+CAUSA_EXAMPLE = {"1722218474": {"value": "1722218474"}}
+MOVIMIENTO_EXAMPLE = {"25957977": {"value": 25957977}}
+
+
+app = FastAPI(title="Prueba Tusdatos.co")
 
 
 @app.get("/healthcheck")
-async def healthcheck():
+async def healthcheck() -> dict[str, str]:
     return {"status": "ok"}
 
 
-# @app.get("/actor/{cedula}")
-# async def get_actor(cedula: str):
-#     await crawler.get_actor_info(cedula)
-#     return {"status": "ok"}
+@app.get("/stats")
+async def get_stats() -> dict[str, int]:
+    return {
+        "litigantes": await Litigante.all().count(),
+        "causas": await Causa.all().count(),
+        "movimientos": await Movimiento.all().count(),
+        "actuaciones": await Actuacion.all().count(),
+        "incidentes": await Incidente.all().count(),
+        "implicados": await Implicado.all().count(),
+    }
 
 
-# @app.get("/demandado/{cedula}")
-# async def get_demandado(cedula: str):
-#     await crawler.get_demandado_info(cedula)
-#     return {"status": "ok"}
+@app.get("/litigantes/{cedula}", response_model=ProcessResponse)
+async def process_litigante_data(
+    cedula: str = Path(..., openapi_examples=ACTORES_EXAMPLES),
+) -> ProcessResponse | None:
+    response = await handler.process_litigante(cedula, LitiganteTipo.ACTOR)
+    return response
 
 
-@app.post("/adquirirCausasActores")
-async def adquirir_causas_actores(actores: list[str]):
-    await crawler.get_actores_info(actores)
-    return {"status": "ok"}
+# Only for verification
+@app.get("/causas/actores/{cedula}", response_model=list[Causa_Pydantic], tags=["verificacion"])
+async def get_causas_actor(cedula: str = Path(..., openapi_examples=CAUSA_EXAMPLE)):
+    db_service = DBService()
+    response = await db_service.get_causas_by_actor_id(cedula)
+    return response
 
 
-@app.post("/adquirirCausasDemandados")
-async def adquirir_causas_demandados(actores: list[str]):
-    await crawler.get_demandados_info(actores)
-    return {"status": "ok"}
+@app.get("/causasId/actores/{cedula}")
+async def get_causas_id_actor(cedula: str = Path(..., openapi_examples=ACTORES_EXAMPLES)) -> list[str]:
+    db_service = DBService()
+    response = await db_service.get_causas_ids_by_actor_id(cedula)
+    return response
 
 
-@app.post("/adquirirCausas")
-async def adquirir_causas(cedulas: list[str]):
-    await crawler.get_actores_info(cedulas)
-    await crawler.get_demandados_info(cedulas)
-    return {"status": "ok"}
+# Only for verification
+@app.get("/causas/actores/{cedula}/movimientos", response_model=list[Movimiento_Pydantic], tags=["verificacion"])
+async def get_movimientos_actor(cedula: str = Path(..., openapi_examples=CAUSA_EXAMPLE)):
+    db_service = DBService()
+    response = await db_service.get_moviminetos_by_actor_id(cedula)
+    return response
 
 
-# @app.get("/causas/actor/{cedula}")
-# async def get_causas_actor(cedula: str):
-#     async with ProcesosJudicialesClient() as client:
-#         "0968599020001"
-#         request = CausasSchema(actor=CausaActor(cedulaActor=cedula))
-#         response = await client.get_causas(request)
-#         return response
-
-
-# @app.get("/causas/demandado/{cedula}")
-# async def get_causas_demandado(cedula: str):
-#     async with ProcesosJudicialesClient() as client:
-#         "1791251237001"
-#         request = CausasSchema(demandado=CausaDemandado(cedulaDemandado=cedula))
-#         response = await client.get_causas(request)
-#         return response
-
-
-# @app.get("/proceso/incidentes/{proceso}")
-# async def get_incidentes_proceso(proceso: str):
-#     "13284202419612"
-#     async with ProcesosJudicialesClient() as client:
-#         response = await client.get_incidente_judicatura(proceso)
-#         return response
-
-
-# @app.get("/proceso/informacionJuicio/{proceso}")
-# async def get_informacion_proceso(proceso: str):
-#     "13284202419612"
-#     async with ProcesosJudicialesClient() as client:
-#         response = await client.get_informacion_juicio(proceso)
-#         return response
-
-
-# @app.get("/proceso/informacionJuicio/{proceso}/ingresoDirecto/{movimiento}")
-# async def get_existe_ingreso_directo(proceso: str, movimiento: int):
-#     {"idJuicio": "13284202419612", "idMovimientoJuicioIncidente": 26373431}
-#     request = GetExisteIngresoDirectoRequest(idJuicio=proceso, idMovimientoJuicioIncidente=movimiento)
-#     async with ProcesosJudicialesClient() as client:
-#         response = await client.get_existe_ingreso_directo(request)
-#         return response
-
-
-# @app.get("/proceso/informacionJuicio/{proceso}/actuacionesJudiciales/")
-# async def get_actuaciones_judiciales(proceso: str):
-#     # 13284202419612 proceso  26373431 movimiento
-#     # request = {
-#     #     "aplicativo": "web",
-#     #     "idIncidenteJudicatura": 27748985,
-#     #     "idJudicatura": "23331",
-#     #     "idJuicio": "23331202402373",
-#     #     "idMovimientoJuicioIncidente": 26371178,
-#     #     "incidente": 1,
-#     #     "nombreJudicatura": "UNIDAD JUDICIAL CIVIL DEL CANTÓN SANTO DOMINGO",
-#     # }
-#     async with ProcesosJudicialesClient() as client:
-#         incidente_judicatura = await client.get_incidente_judicatura(proceso)
-#         request = ActuacionesJudicialesRequest(
-#             idIncidenteJudicatura=incidente_judicatura.incidentesJudicaturas[0]
-#             .lstIncidenteJudicatura[0]
-#             .idIncidenteJudicatura,
-#             idJudicatura=incidente_judicatura.incidentesJudicaturas[0].idJudicatura,
-#             idJuicio=proceso,
-#             idMovimientoJuicioIncidente=incidente_judicatura.incidentesJudicaturas[0]
-#             .lstIncidenteJudicatura[0]
-#             .idMovimientoJuicioIncidente,
-#             incidente=incidente_judicatura.incidentesJudicaturas[0].lstIncidenteJudicatura[0].incidente,
-#             nombreJudicatura=incidente_judicatura.incidentesJudicaturas[0].nombreJudicatura,
-#         )
-#         response = await client.get_actuaciones_judiciales(request)
-#         return response
+# Only for verification
+@app.get(
+    "/causas/actores/{cedula}/movimientos/{movimiento_id}/actuaciones",
+    response_model=list[Actuacion_Pydantic],
+    tags=["verificacion"],
+)
+async def get_actor_actuaciones_by_movimiento_id(
+    cedula: str = Path(..., openapi_examples=CAUSA_EXAMPLE),
+    movimiento_id: int = Path(..., openapi_examples=MOVIMIENTO_EXAMPLE),
+):
+    db_service = DBService()
+    response = await db_service.get_actor_actuaciones_by_movimiento_id(cedula, movimiento_id)
+    return response
 
 
 register_tortoise(
     app,
-    db_url="sqlite://db.sqlite3",
+    db_url="sqlite://db.sqlite3",  # "sqlite://db.sqlite3",  # or in memory db: "sqlite://:memory:"
     modules={"models": ["consulta_pj.models"]},
-    add_exception_handlers=True,
     generate_schemas=True,
+    add_exception_handlers=True,
 )
