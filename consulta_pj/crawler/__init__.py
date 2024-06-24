@@ -8,6 +8,7 @@ from .schemas import (
     JudicaturaSchema,
     LitiganteSchema,
     LitiganteTipo,
+    MovimientoSchema,
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "LitiganteSchema",
     "ImplicadoSchema",
     "InformacionLitigante",
+    "MovimientoSchema",
 ]

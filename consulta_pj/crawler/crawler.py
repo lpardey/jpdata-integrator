@@ -3,15 +3,18 @@ import logging
 import backoff
 import orjson
 
+from consulta_pj.client import ActuacionesResponse as ClientActuacionesResponse
 from consulta_pj.client import (
     CausaActor,
     CausaDemandado,
+    CausasRequest,
     CausasResponse,
-    CausasSchema,
     ProcesosJudicialesClient,
     ProcesosJudicialesClientException,
     get_actuaciones_request,
 )
+from consulta_pj.client import IncidenteSchema as ClientIncidenteSchema
+from consulta_pj.client import LitiganteSchema as ClientLitiganteSchema
 from consulta_pj.client import (
     MovimientoSchema as ClientMovimientoSchema,
 )
@@ -32,7 +35,7 @@ from .schemas import (
 
 async def get_actor_info(cedula: str, max_concurrency: int = 15) -> InformacionLitigante:
     litigante = LitiganteSchema(cedula=cedula, tipo=LitiganteTipo.ACTOR)
-    causas_request = CausasSchema(actor=CausaActor(cedulaActor=cedula))
+    causas_request = CausasRequest(actor=CausaActor(cedulaActor=cedula))
     return await get_litigante_info(litigante, causas_request, max_concurrency)
 
 
@@ -47,13 +50,13 @@ async def get_demandados_info(cedulas_demandados: list[str], max_concurrency: in
 
 async def get_demandado_info(cedula: str, max_concurrency: int = 15) -> InformacionLitigante:
     litigante = LitiganteSchema(cedula=cedula, tipo=LitiganteTipo.DEMANDADO)
-    causas_request = CausasSchema(demandado=CausaDemandado(cedulaDemandado=cedula))
+    causas_request = CausasRequest(demandado=CausaDemandado(cedulaDemandado=cedula))
     return await get_litigante_info(litigante, causas_request, max_concurrency)
 
 
 async def get_litigante_info(
     litigante: LitiganteSchema,
-    causas_request: CausasSchema,
+    causas_request: CausasRequest,
     max_concurrency: int,
 ) -> InformacionLitigante:
     async with ProcesosJudicialesClient() as client:
@@ -88,11 +91,11 @@ async def get_causa(causa: CausasResponse, client: ProcesosJudicialesClient) -> 
     except ProcesosJudicialesClientException as e:
         logging.exception(e)
         logging.error(f"Error al obtener información de la causa {causa.idJuicio}")
-        logging.error(f"Procesando causa {causa.idJuicio}: {orjson.dumps(causa.model_dump())}")
+        logging.error(f"Procesando causa {causa.idJuicio}: {orjson.dumps(causa.model_dump()).decode()}")
         raise
     except Exception as e:
         logging.exception(e)
-        logging.error("no se que ha pasado")
+        logging.error("Unexpected error")
         raise
 
 
@@ -110,36 +113,10 @@ async def _process_movimiento(
     ]
 
     actuaciones_judiciales = [
-        (incidente, await client.get_actuaciones_judiciales(request)) for incidente, request in actuaciones_requests
+        (incidente, await client.get_actuaciones(request)) for incidente, request in actuaciones_requests
     ]
 
-    incidentes = [
-        IncidenteSchema(
-            idIncidente=incidente.idIncidenteJudicatura,
-            fechaCrea=incidente.fechaCrea,
-            actuaciones=[
-                ActuacionSchema.model_validate(actuacion, from_attributes=True)
-                for actuacion in actuaciones.actuaciones_judiciales
-            ],
-            actores=[
-                ImplicadoSchema(
-                    idImplicado=actor.idLitigante,
-                    nombre=actor.nombresLitigante,
-                    representante=actor.representadoPor,
-                )
-                for actor in incidente.lstLitiganteActor or []
-            ],
-            demandados=[
-                ImplicadoSchema(
-                    idImplicado=demandado.idLitigante,
-                    nombre=demandado.nombresLitigante,
-                    representante=demandado.representadoPor,
-                )
-                for demandado in incidente.lstLitiganteDemandado or []
-            ],
-        )
-        for incidente, actuaciones in actuaciones_judiciales
-    ]
+    incidentes = [_get_incidentes_schema(incidente, actuaciones) for incidente, actuaciones in actuaciones_judiciales]
 
     idMovimiento = movimiento.lstIncidenteJudicatura[0].idMovimientoJuicioIncidente
     judicatura = JudicaturaSchema(
@@ -148,3 +125,34 @@ async def _process_movimiento(
 
     result = MovimientoSchema(idMovimiento=idMovimiento, judicatura=judicatura, incidentes=incidentes)
     return result
+
+
+def _get_incidentes_schema(
+    incidente: ClientIncidenteSchema,
+    actuaciones_response: ClientActuacionesResponse,
+) -> IncidenteSchema:
+    actuaciones = [
+        ActuacionSchema.model_validate(actuacion, from_attributes=True)
+        for actuacion in actuaciones_response.actuaciones
+    ]
+    actores = _get_implicados(incidente.lstLitiganteActor or [])
+    demandados = _get_implicados(incidente.lstLitiganteDemandado or [])
+    result = IncidenteSchema(
+        idIncidente=incidente.idIncidenteJudicatura,
+        fechaCrea=incidente.fechaCrea,
+        actuaciones=actuaciones,
+        actores=actores,
+        demandados=demandados,
+    )
+    return result
+
+
+def _get_implicados(litigantes: list[ClientLitiganteSchema]) -> list[ImplicadoSchema]:
+    return [
+        ImplicadoSchema(
+            idImplicado=litigante.idLitigante,
+            nombre=litigante.nombresLitigante,
+            representante=litigante.representadoPor,
+        )
+        for litigante in litigantes
+    ]

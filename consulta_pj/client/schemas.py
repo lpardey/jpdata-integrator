@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class ActuacionesJudicialesRequest(BaseModel):
+class ActuacionesRequest(BaseModel):
     aplicativo: str = "web"
     idIncidenteJudicatura: int
     idJudicatura: str
@@ -28,7 +28,7 @@ class PaginatedRequest(BaseModel):
     size: int = 10
 
 
-class CausasSchema(BaseModel):
+class CausasRequest(BaseModel):
     numeroCausa: str = ""
     actor: CausaActor = CausaActor()
     demandado: CausaDemandado = CausaDemandado()
@@ -37,11 +37,11 @@ class CausasSchema(BaseModel):
     recaptcha: str = "verdad"
 
 
-class CausasRequest(CausasSchema, PaginatedRequest):
+class CausasRequestBody(CausasRequest, PaginatedRequest):
     pass
 
 
-class ContarCausasRequest(CausasSchema):
+class ContarCausasRequest(CausasRequest):
     pass
 
 
@@ -68,20 +68,7 @@ class CausasResponse(BaseModel):
     iedocumentoAdjunto: str | None = None
 
 
-class GetInformacionJuicioResponse(BaseModel):
-    causas: list[CausasResponse]
-
-
-class GetExisteIngresoDirectoRequest(BaseModel):
-    idJuicio: str
-    idMovimientoJuicioIncidente: int
-
-
-class GetExisteIngresoDirectoResponse(BaseModel):
-    ingresado: str
-
-
-class ActuacionJudicial(BaseModel):
+class Actuacion(BaseModel):
     codigo: int
     idJudicatura: str
     idJuicio: str
@@ -101,18 +88,14 @@ class ActuacionJudicial(BaseModel):
     idTablaReferencia: str
 
 
-class GetActuacionesJudicialesResponse(BaseModel):
-    actuaciones_judiciales: list[ActuacionJudicial]
+class ActuacionesResponse(BaseModel):
+    actuaciones: list[Actuacion]
 
 
 class JudicaturaSchema(BaseModel):
     idJudicatura: str
     nombreJudicatura: str
     ciudad: str
-
-
-class GetIncidenteJudicaturaResponse(BaseModel):
-    incidentesJudicaturas: list[JudicaturaSchema]
 
 
 class LitiganteSchema(BaseModel):
@@ -146,8 +129,8 @@ def get_actuaciones_request(
     idJuicio: str,
     incidente: IncidenteSchema,
     movimiento: MovimientoSchema,
-) -> ActuacionesJudicialesRequest:
-    return ActuacionesJudicialesRequest(
+) -> ActuacionesRequest:
+    return ActuacionesRequest(
         idIncidenteJudicatura=incidente.idIncidenteJudicatura,
         idJudicatura=movimiento.idJudicatura,
         idJuicio=idJuicio,

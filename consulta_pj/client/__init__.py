@@ -1,12 +1,11 @@
-from .client import ProcesosJudicialesClient
-from .exceptions import ProcesosJudicialesClientException
+from .client import ProcesosJudicialesClient, ProcesosJudicialesClientException
 from .schemas import (
-    ActuacionesJudicialesRequest,
+    ActuacionesRequest,
+    ActuacionesResponse,
     CausaActor,
     CausaDemandado,
+    CausasRequest,
     CausasResponse,
-    CausasSchema,
-    GetExisteIngresoDirectoRequest,
     IncidenteSchema,
     JudicaturaSchema,
     LitiganteSchema,
@@ -18,16 +17,16 @@ from .schemas import (
 __all__ = [
     "ProcesosJudicialesClient",
     "ProcesosJudicialesClientException",
-    "ActuacionesJudicialesRequest",
+    "ActuacionesRequest",
     "CausaActor",
     "CausaDemandado",
     "CausasResponse",
-    "CausasSchema",
+    "CausasRequest",
     "IncidenteSchema",
     "LitiganteSchema",
-    "GetExisteIngresoDirectoRequest",
     "JudicaturaSchema",
     "MovimientosResponse",
     "MovimientoSchema",
     "get_actuaciones_request",
+    "ActuacionesResponse",
 ]
