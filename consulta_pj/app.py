@@ -1,14 +1,12 @@
-import logging
-
 from fastapi import FastAPI, Path
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from tortoise.contrib.fastapi import register_tortoise
 
+from consulta_pj.crawler.schemas import InformacionLitigante
 from consulta_pj.db_service import DBService
 
-from . import crawler
-from .crawler import crawler_copy
-
-logging.basicConfig(level=logging.INFO)
+from . import handler
+from .crawler import LitiganteTipo, crawler
 
 app = FastAPI()
 
@@ -30,12 +28,6 @@ async def healthcheck() -> dict[str, str]:
 #     return {"status": "ok"}
 
 
-@app.post("/adquirirCausasActores")
-async def adquirir_causas_actores(actores: list[str] = ["0968599020001"]) -> dict[str, str]:
-    await crawler.get_actores_info(actores)
-    return {"status": "ok"}
-
-
 # @app.post("/adquirirCausasDemandados")
 # async def adquirir_causas_demandados(actores: list[str] = ["1791251237001"]) -> dict[str, str]:
 #     await crawler.get_demandados_info(actores)
@@ -53,6 +45,18 @@ DEMANDADOS_EXAMPLES = {"1791251237001": {"value": "1791251237001"}, "09685990200
 PROCESOS_EXAMPLES = {"Actor": {"value": "02331202200019"}, "Demandado": {"value": "17230202115775"}}
 
 
+@app.get("/actores/{cedula}")
+async def get_actor_info(cedula: str):
+    response = await handler.process_litigante(cedula, LitiganteTipo.ACTOR)
+    return response
+
+
+@app.get("/demandados/{cedula}")
+async def get_demandado_info(cedula: str) -> InformacionLitigante:
+    response = await crawler.get_demandado_info(cedula)
+    return response
+
+
 @app.get("/causas/actor/{cedula}")
 async def get_causas_actor(
     cedula: str = Path(..., openapi_examples=ACTORES_EXAMPLES),
@@ -62,17 +66,20 @@ async def get_causas_actor(
     return response
 
 
-@app.get("/prueba/{cedula}")
-async def get_prueba(cedula: str):
-    result = await crawler_copy.get_actor_info(cedula, max_concurrency=15)
-    return result
-
-
 @app.get("/causas/demandado/{cedula}")
 async def get_causas_demandado(cedula: str = Path(..., openapi_examples=DEMANDADOS_EXAMPLES)) -> list[str]:
     db_service = DBService()
     response = await db_service.get_causas_by_demandado_id(cedula)
     return response
+
+
+@app.get("/asdf/{cedula}")
+async def get_asdf(cedula: str = "0968599020001") -> handler.ProcessResponse | None:
+    asdf = await crawler.get_actor_info(cedula)
+    with open("qwer.json", "w") as f:
+        import json
+
+        json.dump(asdf.model_dump(), f, default=str)
 
 
 # @app.get("/causas/{id}", response_model=Proceso_Pydantic)
@@ -158,7 +165,7 @@ async def get_causas_demandado(cedula: str = Path(..., openapi_examples=DEMANDAD
 
 register_tortoise(
     app,
-    db_url="sqlite://db.sqlite3",
+    db_url="sqlite://db.sqlite3",  # "sqlite://db.sqlite3",  # or in memory db: "sqlite://:memory:"
     modules={"models": ["consulta_pj.models"]},
     generate_schemas=True,
     add_exception_handlers=True,

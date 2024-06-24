@@ -15,13 +15,12 @@ from consulta_pj.client import (
 from consulta_pj.client import (
     MovimientoSchema as ClientMovimientoSchema,
 )
-from consulta_pj.db_service import DBService
+from consulta_pj.concurrency import gather_with_concurrency, log_progress
 
-from .concurrency import gather_with_concurrency, log_progress
 from .schemas import (
     ActuacionSchema,
     CausaSchema,
-    ImplicadosSchema,
+    ImplicadoSchema,
     IncidenteSchema,
     InformacionLitigante,
     JudicaturaSchema,
@@ -29,17 +28,6 @@ from .schemas import (
     LitiganteTipo,
     MovimientoSchema,
 )
-
-
-async def get_actores_info(cedulas_actores: list[str], max_concurrency: int = 15) -> None:
-    db_service = DBService()
-    actores = await db_service.get_or_create_litigantes_by_id(set(cedulas_actores))
-    tasks = [get_actor_info(actor) for actor in actores]
-    # tasks_with_progress = (
-    #     log_progress("Actor", index, len(cedulas_actores), task, level=logging.WARNING)
-    #     for index, task in enumerate(tasks)
-    # )
-    await gather_with_concurrency(max_concurrency, tasks)
 
 
 async def get_actor_info(cedula: str, max_concurrency: int = 15) -> InformacionLitigante:
@@ -90,7 +78,12 @@ async def get_causa(causa: CausasResponse, client: ProcesosJudicialesClient) -> 
             for movimiento in movimientos_response.movimientos
         ]
         movimientos = [movimiento for movimiento in movimientos_raw if movimiento is not None]
-        causa_schema = CausaSchema(idJuicio=causa.idJuicio, movimientos=movimientos)
+        causa_schema = CausaSchema(
+            idJuicio=causa.idJuicio,
+            nombreDelito=causa.nombreDelito,
+            fechaIngreso=causa.fechaIngreso,
+            movimientos=movimientos,
+        )
         return causa_schema
     except ProcesosJudicialesClientException as e:
         logging.exception(e)
@@ -129,7 +122,7 @@ async def _process_movimiento(
                 for actuacion in actuaciones.actuaciones_judiciales
             ],
             actores=[
-                ImplicadosSchema(
+                ImplicadoSchema(
                     idImplicado=actor.idLitigante,
                     nombre=actor.nombresLitigante,
                     representante=actor.representadoPor,
@@ -137,7 +130,7 @@ async def _process_movimiento(
                 for actor in incidente.lstLitiganteActor or []
             ],
             demandados=[
-                ImplicadosSchema(
+                ImplicadoSchema(
                     idImplicado=demandado.idLitigante,
                     nombre=demandado.nombresLitigante,
                     representante=demandado.representadoPor,

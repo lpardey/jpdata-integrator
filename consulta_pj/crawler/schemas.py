@@ -15,7 +15,7 @@ class JudicaturaSchema(BaseModel):
     ciudad: str
 
 
-class ImplicadosSchema(BaseModel):
+class ImplicadoSchema(BaseModel):
     idImplicado: int
     nombre: str
     representante: str | None
@@ -32,8 +32,8 @@ class ActuacionSchema(BaseModel):
 class IncidenteSchema(BaseModel):
     idIncidente: int
     fechaCrea: datetime
-    actores: list[ImplicadosSchema]
-    demandados: list[ImplicadosSchema]
+    actores: list[ImplicadoSchema]
+    demandados: list[ImplicadoSchema]
     actuaciones: list[ActuacionSchema]
 
 
@@ -51,6 +51,8 @@ class MovimientoSchema(BaseModel):
 
 class CausaSchema(BaseModel):
     idJuicio: str
+    nombreDelito: str
+    fechaIngreso: datetime
     movimientos: list[MovimientoSchema]
 
 

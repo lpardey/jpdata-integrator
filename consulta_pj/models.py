@@ -21,7 +21,8 @@ class Causa(Model):
     nombreDelito = fields.CharField(max_length=255)
     fechaIngreso = fields.DatetimeField()
 
-    litigantes: fields.ManyToManyRelation[Litigante]
+    actores: fields.ManyToManyRelation[Litigante]
+    demandados: fields.ManyToManyRelation[Litigante]
     movimientos: fields.ReverseRelation[Movimiento]
 
 
@@ -41,6 +42,7 @@ class Judicatura(Model):
 
     movimientos: fields.ReverseRelation[Movimiento]
     incidentes: fields.ReverseRelation[Incidente]
+    actuaciones: fields.ReverseRelation[Actuacion]
 
 
 class Incidente(Model):
@@ -49,7 +51,7 @@ class Incidente(Model):
         "models.Judicatura", related_name="incidentes"
     )
 
-    fechaCrea = fields.DatetimeField()
+    fechaCrea = fields.DatetimeField(null=True)
 
     actores: fields.ManyToManyRelation[Implicado]
     demandados: fields.ManyToManyRelation[Implicado]
@@ -60,9 +62,9 @@ class Incidente(Model):
 
 
 class Implicado(Model):
-    id = fields.IntField(pk=True)
+    id = fields.IntField(primary_key=True)
     nombre = fields.CharField(max_length=255)
-    representante = fields.CharField(max_length=255)
+    representante = fields.CharField(max_length=255, null=True)
 
     incidentes_demandado: fields.ManyToManyRelation[Incidente] = fields.ManyToManyField(
         "models.Incidente", related_name="demandados", through="incidente_implicado_demandado"
@@ -74,11 +76,14 @@ class Implicado(Model):
 
 
 class Actuacion(Model):
-    codigo = fields.IntField(primary_key=True)
-    judicatura: fields.ForeignKeyRelation[Incidente] = fields.ForeignKeyField(
+    codigo = fields.IntField()
+    judicatura: fields.ForeignKeyRelation[Judicatura] = fields.ForeignKeyField(
+        "models.Judicatura", related_name="actuaciones"
+    )
+    incidente: fields.ForeignKeyRelation[Incidente] = fields.ForeignKeyField(
         "models.Incidente", related_name="actuaciones"
     )
     fecha = fields.DatetimeField()
-    tipo = fields.CharField(max_length=64)
+    tipo = fields.TextField()
     actividad = fields.TextField()
     nombreArchivo = fields.CharField(max_length=255, null=True)

@@ -13,9 +13,6 @@ from .schemas import (
     CausasSchema,
     ContarCausasRequest,
     GetActuacionesJudicialesResponse,
-    GetExisteIngresoDirectoRequest,
-    GetExisteIngresoDirectoResponse,
-    GetInformacionJuicioResponse,
     MovimientosResponse,
 )
 
@@ -37,7 +34,9 @@ class WebClient:
         ).__aenter__()
         return self
 
-    async def __aexit__(self, exc_type: type[BaseException] | None, exc: BaseException | None, tb: TracebackType | None) -> None:
+    async def __aexit__(
+        self, exc_type: type[BaseException] | None, exc: BaseException | None, tb: TracebackType | None
+    ) -> None:
         if self.session:
             await self.session.__aexit__(exc_type, exc, tb)
 
@@ -91,15 +90,15 @@ class ProcesosJudicialesClient(WebClient):
             causas_actor = [CausasResponse(**causa) for causa in response_data]
             return causas_actor
 
-    async def get_informacion_juicio(self, proceso: str) -> GetInformacionJuicioResponse:
-        if not self.session:
-            raise ProcesosJudicialesClientException("No hay una sesión activa")
-        endpoint = f"getInformacionJuicio/{proceso}"
-        url = f"{self.API_URL}{endpoint}"
-        async with self.session.get(url) as response:
-            raw_response_data = await response.text()
-            response_data = orjson.loads(raw_response_data)
-            return GetInformacionJuicioResponse(causas=response_data)
+    # async def get_informacion_juicio(self, proceso: str) -> GetInformacionJuicioResponse:
+    #     if not self.session:
+    #         raise ProcesosJudicialesClientException("No hay una sesión activa")
+    #     endpoint = f"getInformacionJuicio/{proceso}"
+    #     url = f"{self.API_URL}{endpoint}"
+    #     async with self.session.get(url) as response:
+    #         raw_response_data = await response.text()
+    #         response_data = orjson.loads(raw_response_data)
+    #         return GetInformacionJuicioResponse(causas=response_data)
 
     async def get_movimientos(self, proceso: str) -> MovimientosResponse:
         if not self.session:
@@ -112,18 +111,18 @@ class ProcesosJudicialesClient(WebClient):
             response_data = orjson.loads(raw_response_data)
             return MovimientosResponse(movimientos=response_data)
 
-    async def get_existe_ingreso_directo(
-        self, request: GetExisteIngresoDirectoRequest
-    ) -> GetExisteIngresoDirectoResponse:
-        if not self.session:
-            raise ProcesosJudicialesClientException("No hay una sesión activa")
-        endpoint = "existeIngresoDirecto"
-        api_url = "https://api.funcionjudicial.gob.ec/EXPEL-CONSULTA-CAUSAS-CLEX-SERVICE/api/consulta-causas-clex/informacion/"
-        url = f"{api_url}{endpoint}"
-        async with self.session.post(url, data=request.model_dump_json()) as response:
-            raw_response_data = await response.text()
-            response_data = GetExisteIngresoDirectoResponse(**orjson.loads(raw_response_data))
-            return response_data
+    # async def get_existe_ingreso_directo(
+    #     self, request: GetExisteIngresoDirectoRequest
+    # ) -> GetExisteIngresoDirectoResponse:
+    #     if not self.session:
+    #         raise ProcesosJudicialesClientException("No hay una sesión activa")
+    #     endpoint = "existeIngresoDirecto"
+    #     api_url = "https://api.funcionjudicial.gob.ec/EXPEL-CONSULTA-CAUSAS-CLEX-SERVICE/api/consulta-causas-clex/informacion/"
+    #     url = f"{api_url}{endpoint}"
+    #     async with self.session.post(url, data=request.model_dump_json()) as response:
+    #         raw_response_data = await response.text()
+    #         response_data = GetExisteIngresoDirectoResponse(**orjson.loads(raw_response_data))
+    #         return response_data
 
     async def get_actuaciones_judiciales(
         self, request: ActuacionesJudicialesRequest
