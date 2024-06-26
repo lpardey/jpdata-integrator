@@ -30,9 +30,6 @@ class Causa(Model):
 class Movimiento(Model):
     idMovimientoJuicioIncidente = fields.IntField(primary_key=True)
     causa: fields.ForeignKeyRelation[Causa] = fields.ForeignKeyField("models.Causa", related_name="movimientos")
-    judicatura: fields.ForeignKeyRelation[Judicatura] = fields.ForeignKeyField(
-        "models.Judicatura", related_name="movimientos"
-    )
     incidentes: fields.ReverseRelation[Incidente]
 
 
@@ -94,5 +91,5 @@ class Actuacion(Model):
 
 Tortoise.init_models(["consulta_pj.models"], "models")
 Causa_Pydantic = pydantic_model_creator(Causa)
-Movimiento_Pydantic = pydantic_model_creator(Movimiento)
-Actuacion_Pydantic = pydantic_model_creator(Actuacion)
+Movimiento_Pydantic = pydantic_model_creator(Movimiento, exclude=("causa", "judicatura"))
+Actuacion_Pydantic = pydantic_model_creator(Actuacion, exclude=("judicatura", "incidente"))

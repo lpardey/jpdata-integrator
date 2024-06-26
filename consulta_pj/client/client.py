@@ -59,8 +59,8 @@ class ProcesosJudicialesClient(WebClient):
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Site": "same-site",
-        # "Pragma": "no-cache",
-        # "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+        "Cache-Control": "no-cache",
         "Origin": "https://procesosjudiciales.funcionjudicial.gob.ec",
         "Referer": "https://procesosjudiciales.funcionjudicial.gob.ec/",
     }

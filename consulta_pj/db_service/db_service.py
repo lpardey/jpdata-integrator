@@ -25,9 +25,9 @@ from .schemas import CreateActuacionRequest, CreateIncidenteRequest
 
 
 class DBService:
-    async def update_or_create_litigante(self, litigante: LitiganteSchema, ids_causas: list[str]) -> str:
+    async def update_or_create_litigante(self, litigante: LitiganteSchema, causas_ids: list[str]) -> str:
         litigante_object, _ = await Litigante.update_or_create(cedula=litigante.cedula)
-        causas = await Causa.filter(idJuicio__in=ids_causas)
+        causas = await Causa.filter(idJuicio__in=causas_ids)
         if litigante.tipo == LitiganteTipo.ACTOR:
             await litigante_object.causas_actor.add(*causas)
         else:
@@ -98,26 +98,22 @@ class DBService:
         await Judicatura.bulk_create(new_judicaturas, ignore_conflicts=True)
         return [judicatura.idJudicatura for judicatura in new_judicaturas]
 
-    async def get_or_create_movimiento(self, id_movimiento: int, causa_id: str, judicatura_id: int) -> int:
+    async def get_or_create_movimiento(self, id_movimiento: int, causa_id: str) -> int:
         movimiento, _ = await Movimiento.get_or_create(
-            {"idMovimientoJuicioIncidente": id_movimiento, "causa_id": causa_id, "judicatura_id": judicatura_id},
+            {"idMovimientoJuicioIncidente": id_movimiento, "causa_id": causa_id},
             idMovimientoJuicioIncidente=id_movimiento,
         )
         return movimiento.idMovimientoJuicioIncidente
 
-    async def update_or_create_movimiento(self, id_movimiento: int, causa_id: str, judicatura_id: int) -> int:
+    async def update_or_create_movimiento(self, id_movimiento: int, causa_id: str) -> int:
         movimiento, _ = await Movimiento.update_or_create(
-            idMovimientoJuicioIncidente=id_movimiento, defaults={"causa_id": causa_id, "judicatura_id": judicatura_id}
+            idMovimientoJuicioIncidente=id_movimiento, defaults={"causa_id": causa_id}
         )
         return movimiento.idMovimientoJuicioIncidente
 
     async def bulk_create_movimiento(self, movimientos: list[MovimientoSchema], causa_id: str) -> list[int]:
         new_movimientos = [
-            Movimiento(
-                idMovimientoJuicioIncidente=movimiento.idMovimiento,
-                causa_id=causa_id,
-                judicatura_id=movimiento.judicatura.idJudicatura,
-            )
+            Movimiento(idMovimientoJuicioIncidente=movimiento.idMovimiento, causa_id=causa_id)
             for movimiento in movimientos
         ]
         await Movimiento.bulk_create(new_movimientos, ignore_conflicts=True)
@@ -127,7 +123,7 @@ class DBService:
         incidente_object, _ = await Incidente.get_or_create(
             {
                 "idIncidente": request.incidente.idIncidente,
-                "fechaIngreso": request.incidente.fechaCrea,
+                "fechaCrea": request.incidente.fechaCrea,
                 "judicatura_id": request.judicatura_id,
             },
             idIncidente=request.incidente.idIncidente,
@@ -137,7 +133,7 @@ class DBService:
     async def update_or_create_incidente(self, request: CreateIncidenteRequest) -> int:
         incidente_object, _ = await Incidente.update_or_create(
             idIncidente=request.incidente.idIncidente,
-            defaults={"fechaIngreso": request.incidente.fechaCrea, "judicatura_id": request.judicatura_id},
+            defaults={"fechaCrea": request.incidente.fechaCrea, "judicatura_id": request.judicatura_id},
         )
         return incidente_object.idIncidente
 
@@ -145,7 +141,7 @@ class DBService:
         new_incidentes = [
             Incidente(
                 idIncidente=request.incidente.idIncidente,
-                fechaIngreso=request.incidente.fechaCrea,
+                fechaCrea=request.incidente.fechaCrea,
                 judicatura_id=request.judicatura_id,
                 movimiento_id=request.movimiento_id,
             )
@@ -228,9 +224,24 @@ class DBService:
         await Actuacion.bulk_create(new_actuaciones, ignore_conflicts=True)
         return [actuacion.codigo for actuacion in new_actuaciones]
 
+    async def get_causas_by_cedula(self, cedula: str, tipo: LitiganteTipo) -> list[PydanticModel]:
+        field = "actores" if tipo == LitiganteTipo.ACTOR else "demandados"
+        filter_config = {f"{field}__cedula": cedula}
+        raw_causas = await Causa.filter(**filter_config).prefetch_related(
+            "actores", "demandados", "movimientos__incidentes", "movimientos__incidentes__judicatura"
+        )
+        causas = [await Causa_Pydantic.from_tortoise_orm(causa) for causa in raw_causas]
+        return causas
+
     async def get_causas_by_actor_id(self, cedula: str) -> list[PydanticModel]:
         actor = await Litigante.get(cedula=cedula).prefetch_related("causas_actor")
         raw_causas = await actor.causas_actor.all()
+        causas = [await Causa_Pydantic.from_tortoise_orm(causa) for causa in raw_causas]
+        return causas
+
+    async def get_causas_by_demandado_id(self, cedula: str) -> list[PydanticModel]:
+        demandado = await Litigante.get(cedula=cedula).prefetch_related("causas_demandado")
+        raw_causas = await demandado.causas_demandado.all()
         causas = [await Causa_Pydantic.from_tortoise_orm(causa) for causa in raw_causas]
         return causas
 
@@ -239,18 +250,35 @@ class DBService:
         causas: list[str] = await actor.causas_actor.all().values_list("idJuicio", flat=True)  # type: ignore
         return causas
 
+    async def get_causas_ids_by_demandado_id(self, cedula: str) -> list[str]:
+        demandado = await Litigante.get(cedula=cedula).prefetch_related("causas_demandado")
+        causas: list[str] = await demandado.causas_demandado.all().values_list("idJuicio", flat=True)  # type: ignore
+        return causas
+
     async def get_moviminetos_by_actor_id(self, cedula: str) -> list[PydanticModel]:
         actor = await Litigante.get(cedula=cedula).prefetch_related("causas_actor__movimientos__judicatura")
         raw_movimientos = [movimiento for causa in actor.causas_actor for movimiento in causa.movimientos]
         movimientos = [await Movimiento_Pydantic.from_tortoise_orm(movimiento) for movimiento in raw_movimientos]
         return movimientos
 
-    # TODO: Finish
-    async def get_actor_actuaciones_by_movimiento_id(self, cedula: str, movimiento_id: int) -> list[PydanticModel]:
+    async def get_moviminetos_by_demandado_id(self, cedula: str) -> list[PydanticModel]:
+        demandado = await Litigante.get(cedula=cedula).prefetch_related("causas_demandado__movimientos__judicatura")
+        raw_movimientos = [movimiento for causa in demandado.causas_demandado for movimiento in causa.movimientos]
+        movimientos = [await Movimiento_Pydantic.from_tortoise_orm(movimiento) for movimiento in raw_movimientos]
+        return movimientos
+
+    async def get_actuaciones_actor_by_movimiento_id(self, cedula: str, movimiento_id: int) -> list[PydanticModel]:
         raw_actuaciones = await Actuacion.filter(
-            incidente__actores__id=cedula,
+            incidente__movimiento__causa__actores__cedula=cedula,
             incidente__movimiento__idMovimientoJuicioIncidente=movimiento_id,
         )
-        a = await Actuacion.all()
+        actuaciones = [await Actuacion_Pydantic.from_tortoise_orm(actuacion) for actuacion in raw_actuaciones]
+        return actuaciones
+
+    async def get_actuaciones_demandado_by_movimiento_id(self, cedula: str, movimiento_id: int) -> list[PydanticModel]:
+        raw_actuaciones = await Actuacion.filter(
+            incidente__movimiento__causa__demandados__cedula=cedula,
+            incidente__movimiento__idMovimientoJuicioIncidente=movimiento_id,
+        )
         actuaciones = [await Actuacion_Pydantic.from_tortoise_orm(actuacion) for actuacion in raw_actuaciones]
         return actuaciones
