@@ -179,6 +179,7 @@ class DBService:
     async def get_or_create_actuacion(self, request: CreateActuacionRequest) -> int:
         actuacion_object, _ = await Actuacion.get_or_create(
             {
+                "uuid": request.actuacion.uuid,
                 "codigo": request.actuacion.codigo,
                 "actividad": request.actuacion.actividad,
                 "fecha": request.actuacion.fecha,
@@ -187,16 +188,15 @@ class DBService:
                 "incidente_id": request.incidente_id,
                 "nombreArchivo": request.actuacion.nombreArchivo.strip() if request.actuacion.nombreArchivo else None,
             },
-            codigo=request.actuacion.codigo,
-            incidente__idIncidente=request.incidente_id,
+            uuid=request.actuacion.uuid,
         )
         return actuacion_object.codigo
 
     async def update_or_create_actuacion(self, request: CreateActuacionRequest) -> int:
         actuacion_object, _ = await Actuacion.update_or_create(
-            codigo=request.actuacion.codigo,
-            incidente__idIncidente=request.incidente_id,
+            uuid=request.actuacion.uuid,
             defaults={
+                "uuid": request.actuacion.uuid,
                 "codigo": request.actuacion.codigo,
                 "actividad": request.actuacion.actividad,
                 "fecha": request.actuacion.fecha,
@@ -206,11 +206,12 @@ class DBService:
                 "nombreArchivo": request.actuacion.nombreArchivo.strip() if request.actuacion.nombreArchivo else None,
             },
         )
-        return actuacion_object.codigo
+        return actuacion_object.uuid
 
     async def bulk_create_actuacion(self, requests: list[CreateActuacionRequest]) -> list[int]:
         new_actuaciones = [
             Actuacion(
+                uuid=request.actuacion.uuid,
                 codigo=request.actuacion.codigo,
                 incidente_id=request.incidente_id,
                 actividad=request.actuacion.actividad,
@@ -222,7 +223,7 @@ class DBService:
             for request in requests
         ]
         await Actuacion.bulk_create(new_actuaciones, ignore_conflicts=True)
-        return [actuacion.codigo for actuacion in new_actuaciones]
+        return [actuacion.uuid for actuacion in new_actuaciones]
 
     async def get_causas_by_cedula(self, cedula: str, tipo: LitiganteTipo) -> list[PydanticModel]:
         field = "actores" if tipo == LitiganteTipo.ACTOR else "demandados"

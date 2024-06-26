@@ -76,7 +76,8 @@ class Implicado(Model):
 
 
 class Actuacion(Model):
-    codigo = fields.IntField(primary_key=True)
+    uuid = fields.CharField(max_length=64, primary_key=True)
+    codigo = fields.IntField()
     judicatura: fields.ForeignKeyRelation[Judicatura] = fields.ForeignKeyField(
         "models.Judicatura", related_name="actuaciones"
     )
