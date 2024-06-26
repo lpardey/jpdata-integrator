@@ -36,6 +36,7 @@
                             "demandados": [],
                             "actuaciones": [
                                 {
+                                    "uuid": "20240622-16528266136-936030488-936030488",
                                     "codigo": 216025717,
                                     "fecha": "2024-06-22 21:52:40+00:00",
                                     "tipo": "Acta Resumen                                                                                                                                                                                                                                              ",
@@ -43,6 +44,7 @@
                                     "nombreArchivo": "Acta Resumen"
                                 },
                                 {
+                                    "uuid": "20240622-125532951798-593792259-136073074",
                                     "codigo": 216024236,
                                     "fecha": "2024-06-22 17:55:47.980000+00:00",
                                     "tipo": "CONVOCATORIA AUDIENCIA DE PROCEDIMIENTO EXPEDITO-CONTRAVENCIONES DE TRANSITO (RAZON DE NOTIFICACION) ",
@@ -50,6 +52,7 @@
                                     "nombreArchivo": "12283202402129_234918758_12_55_47_P21.pdf"
                                 },
                                 {
+                                    "uuid": "20240622-125448632795-593792259-136073074",
                                     "codigo": 216024236,
                                     "fecha": "2024-06-22 17:54:19+00:00",
                                     "tipo": "CONVOCATORIA AUDIENCIA DE PROCEDIMIENTO EXPEDITO-CONTRAVENCIONES DE TRANSITO (DECRETO) ",
@@ -57,6 +60,7 @@
                                     "nombreArchivo": "12283202402129_234918751_12_54_36_P20.pdf"
                                 },
                                 {
+                                    "uuid": "20240622-124895511014-593792259-1045161820",
                                     "codigo": 16076301,
                                     "fecha": "2024-06-22 17:48:23.550000+00:00",
                                     "tipo": "ACTA DE SORTEO",
@@ -64,6 +68,7 @@
                                     "nombreArchivo": "ACTA DE SORTEO_26430516"
                                 },
                                 {
+                                    "uuid": "20240622-124890812416-593792259-1045161820",
                                     "codigo": 159877044,
                                     "fecha": "2024-06-22 17:48:22+00:00",
                                     "tipo": "CARATULA DE JUICIO",
@@ -113,6 +118,7 @@
                             ],
                             "actuaciones": [
                                 {
+                                    "uuid": "20240621-084958523274-593792259-1045161820",
                                     "codigo": 16070661,
                                     "fecha": "2024-06-21 13:49:31.283000+00:00",
                                     "tipo": "ACTA DE SORTEO",
@@ -120,6 +126,7 @@
                                     "nombreArchivo": "ACTA DE SORTEO_26424934"
                                 },
                                 {
+                                    "uuid": "20240621-08495275103-593792259-1045161820",
                                     "codigo": 159723048,
                                     "fecha": "2024-06-21 13:49:30+00:00",
                                     "tipo": "CARATULA DE JUICIO",
@@ -164,6 +171,7 @@
                             ],
                             "actuaciones": [
                                 {
+                                    "uuid": "20240621-170485795276-593792259-136073074",
                                     "codigo": 216011181,
                                     "fecha": "2024-06-21 22:04:17.540000+00:00",
                                     "tipo": "CALIFICACION DE SOLICITUD Y/O DEMANDA (RAZON DE NOTIFICACION) ",
@@ -171,6 +179,7 @@
                                     "nombreArchivo": "08256202400340_234908866_17_4_16_P21.pdf"
                                 },
                                 {
+                                    "uuid": "20240621-155085527523-593792259-136073074",
                                     "codigo": 216011181,
                                     "fecha": "2024-06-21 20:50:24+00:00",
                                     "tipo": "CALIFICACION DE SOLICITUD Y/O DEMANDA (AUTO DE SUSTANCIACION) ",
@@ -178,6 +187,7 @@
                                     "nombreArchivo": "08256202400340_234886451_15_50_54_P20.pdf"
                                 },
                                 {
+                                    "uuid": "20240620-171574315019-593792259-1045161820",
                                     "codigo": 16070167,
                                     "fecha": "2024-06-20 22:15:31.443000+00:00",
                                     "tipo": "ACTA DE SORTEO",
@@ -185,6 +195,7 @@
                                     "nombreArchivo": "ACTA DE SORTEO_26424442"
                                 },
                                 {
+                                    "uuid": "20240620-171549281537-593792259-1045161820",
                                     "codigo": 159701456,
                                     "fecha": "2024-06-20 22:15:29+00:00",
                                     "tipo": "CARATULA DE JUICIO",

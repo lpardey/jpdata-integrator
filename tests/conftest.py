@@ -8,6 +8,7 @@ from tortoise import Tortoise
 from tortoise.contrib.test import _init_db, getDBConfig
 
 from consulta_pj.client import CausasResponse
+from consulta_pj.crawler.schemas import InformacionLitigante
 
 
 @pytest.fixture()
@@ -32,3 +33,15 @@ def informacion_litigante_data() -> dict[str, Any]:
     filename = Path("tests/fixtures/informacion_litigante.json")
     with open(filename, "r") as f:
         return json.load(f)
+
+
+@pytest.fixture
+def raw_informacion_litigante() -> dict[str, Any]:
+    with open("tests/fixtures/informacion_litigante.json") as f:
+        return json.load(f)
+
+
+@pytest.fixture
+def informacion_litigante(raw_informacion_litigante: dict[str, Any]) -> InformacionLitigante:
+    data = InformacionLitigante(**raw_informacion_litigante)
+    return data

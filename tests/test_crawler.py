@@ -1,3 +1,4 @@
+import json
 from typing import Any
 
 from consulta_pj.client import CausaActor, CausasRequest
@@ -29,5 +30,7 @@ async def test_crawler_get_actor_info(informacion_litigante_data: dict[str, Any]
     assert informacion_litigante is not None
     assert informacion_litigante.litigante.cedula == "1234"
     assert len(informacion_litigante.causas) == 3
-
+    with open("tests/fixtures/informacion_litigante.json", "w") as f:
+        asdf = informacion_litigante.model_dump()
+        json.dump(asdf, f, indent=4, default=str)
     assert expected_result == informacion_litigante
