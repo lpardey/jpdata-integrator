@@ -1,32 +1,43 @@
 import pytest
 
 from consulta_pj.crawler.schemas import InformacionLitigante
-from consulta_pj.db_service.serializers import get_actuaciones_by_incidente, get_incidentes_by_causa
+from consulta_pj.db_service import DBService
+from consulta_pj.db_service.serializers import _serialize_grouped_movimientos_list
 from consulta_pj.handler import handler
-from consulta_pj.models import Litigante
+from consulta_pj.models import Actuacion
 
 
-@pytest.fixture(autouse=True)
-async def populated_db(informacion_litigante: InformacionLitigante, in_memory_db):
-    await handler.persist_causas(informacion_litigante)
+@pytest.fixture()
+async def populate_db_with_litigante_1234(informacion_litigante_1234: InformacionLitigante, in_memory_db):
+    await handler.persist_causas(informacion_litigante_1234)
 
 
-async def test_get_actuaciones_by_incidente(informacion_litigante: InformacionLitigante):
-    incidente_id = informacion_litigante.causas[0].movimientos[0].incidentes[0].idIncidente
-    expected_result = []
-    result = await get_actuaciones_by_incidente(incidente_id)
-    assert result == expected_result
+@pytest.fixture()
+async def populate_db_with_litigante_5678(informacion_litigante_5678: InformacionLitigante, in_memory_db):
+    await handler.persist_causas(informacion_litigante_5678)
 
 
-async def test_get_incidentes_by_causa(informacion_litigante: InformacionLitigante):
-    id_juicio = informacion_litigante.causas[0].idJuicio
-    expected_result = []
-    result = await get_incidentes_by_causa(id_juicio)
-    assert result == expected_result
+async def test_get_actuaciones_by_incidente(
+    informacion_litigante_1234: InformacionLitigante, populate_db_with_litigante_1234
+):
+    db_service = DBService()
+    incidente_id = informacion_litigante_1234.causas[0].movimientos[0].incidentes[0].idIncidente
+
+    result = await db_service.get_actuaciones_by_incidente(incidente_id)
+    actuaciones = await Actuacion.filter(incidente__idIncidente=incidente_id).all()
+
+    assert len(result) > 0
+    assert len(result) == len(actuaciones)
+    assert all([actuacion.actividad in [r.actividad for r in result] for actuacion in actuaciones])
 
 
-async def test_handler_persist_causas(informacion_litigante: InformacionLitigante, in_memory_db):
-    await handler.persist_causas(informacion_litigante)
-    litigante = await Litigante.get(cedula="1234")
-    causas = await litigante.causas_actor.all()
-    assert len(causas) == 3
+async def test_serialize_grouped_movimientos_list(
+    informacion_litigante_5678: InformacionLitigante, populate_db_with_litigante_5678
+):
+    id_juicio = informacion_litigante_5678.causas[0].idJuicio
+
+    result = await _serialize_grouped_movimientos_list(id_juicio)
+
+    assert len(result) == 2
+    assert len(result[0].incidentes[0].actuaciones) == 5
+    assert len(result[1].incidentes[0].actuaciones) == 2

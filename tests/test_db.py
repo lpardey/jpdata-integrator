@@ -1,8 +1,8 @@
 import pytest
 
-from consulta_pj.crawler.schemas import LitiganteSchema, LitiganteTipo
+from consulta_pj.crawler.schemas import InformacionLitigante, LitiganteSchema, LitiganteTipo
 from consulta_pj.db_service import DBService
-from consulta_pj.models import Litigante
+from consulta_pj.models import Causa, Litigante
 
 
 @pytest.fixture(autouse=True)
@@ -10,66 +10,53 @@ async def auto_in_memory_db(in_memory_db):
     yield
 
 
-async def test_get_actor():
-    await Litigante.create(cedula="1234")
-    actor = await Litigante.get(cedula="1234")
-    assert actor.cedula == "1234"
-
-
-async def test_create_actor_without_causas():
+@pytest.mark.parametrize("tipo", [LitiganteTipo.ACTOR, LitiganteTipo.DEMANDADO])
+async def test_create_litigante_without_causas(tipo: LitiganteTipo):
     db_service = DBService()
-    causas_ids = []
-    actor = LitiganteSchema(cedula="3456", nombre="Prueba", tipo=LitiganteTipo.ACTOR)
-    actor_id = await db_service.update_or_create_litigante(actor, causas_ids)
-    litigante_in_db = await Litigante.get(cedula=actor_id)
+    litigante = LitiganteSchema(cedula="1234", nombre="Prueba", tipo=tipo)
+
+    cedula = await db_service.update_or_create_litigante(litigante, [])
+    litigante_in_db = await Litigante.get(cedula=cedula)
     causas_in_db = await litigante_in_db.causas_actor.all()
 
     assert await Litigante.all().count() == 1
-    assert actor_id == actor.cedula == litigante_in_db.cedula
-    assert len(causas_ids) == len(causas_in_db)
+    assert cedula == litigante.cedula == litigante_in_db.cedula
+    assert len(causas_in_db) == 0
 
 
-async def test_create_actors_with_previously_existing_causas():
+@pytest.mark.parametrize("tipo", [LitiganteTipo.ACTOR, LitiganteTipo.DEMANDADO])
+async def test_create_litigante_with_causas(tipo: LitiganteTipo, informacion_litigante_1234: InformacionLitigante):
+    informacion_litigante_1234.litigante.tipo = tipo
     db_service = DBService()
-    existing_causas_ids = ["1234", "5678"]
-    actor = LitiganteSchema(cedula="3456", nombre="Prueba", tipo=LitiganteTipo.ACTOR)
-    actor_id = await db_service.update_or_create_litigante(actor, existing_causas_ids)
-    new_causas_ids = ["1234", "5678", "9012"]
-    await db_service.update_or_create_litigante(actor, new_causas_ids)
+    litigante = LitiganteSchema(cedula="1234", nombre="Prueba", tipo=tipo)
+    causas_ids = [await db_service.get_or_create_causa(causa) for causa in informacion_litigante_1234.causas]
 
-    all_causas_ids = set(existing_causas_ids) | set(new_causas_ids)
-    litigante_in_db = await Litigante.get(cedula=actor_id)
-    causas_in_db = await litigante_in_db.causas_actor.all()
+    await db_service.update_or_create_litigante(litigante, causas_ids)
 
-    assert await Litigante.all().count() == 1
-    assert actor_id == actor.cedula == litigante_in_db.cedula
-    assert len(causas_in_db) == len(all_causas_ids)
+    filter_field = "demandados__cedula" if tipo == LitiganteTipo.DEMANDADO else "actores__cedula"
+    filter_config = {filter_field: litigante.cedula}
+    assert await Causa.filter(**filter_config).count() == 3
 
 
-async def test_create_demandados():
+@pytest.mark.parametrize("tipo", [LitiganteTipo.ACTOR, LitiganteTipo.DEMANDADO])
+async def test_create_litigante_with_previously_existing_causas(
+    tipo: LitiganteTipo, informacion_litigante_1234: InformacionLitigante
+):
     db_service = DBService()
-    causas_ids = ["1234", "5678"]
-    demandado = LitiganteSchema(cedula="3456", nombre="Prueba", tipo=LitiganteTipo.DEMANDADO)
-    demandados_ids = await db_service.update_or_create_litigante(demandado, causas_ids)
+    litigante = informacion_litigante_1234.litigante
+    litigante.tipo = tipo
+    existing_causa_id = await db_service.get_or_create_causa(informacion_litigante_1234.causas[0])
+    litigante_id = await db_service.update_or_create_litigante(litigante, [existing_causa_id])
 
-    assert len(demandados_ids) == 2
-    assert demandados_ids == causas_ids
-    assert await Litigante.all().count() == 2
-    assert await Litigante.filter(cedula__in=causas_ids).count() == 2
+    new_causa_id = await db_service.get_or_create_causa(informacion_litigante_1234.causas[1])
+    await db_service.update_or_create_litigante(litigante, [new_causa_id])
 
+    litigante_in_db = await Litigante.get(cedula=litigante_id)
 
-async def test_create_demandados_with_previously_existing_demandados():
-    db_service = DBService()
-    existing_causas_ids = ["1234", "5678"]
-    demandado = LitiganteSchema(cedula="3456", nombre="Prueba", tipo=LitiganteTipo.DEMANDADO)
-    await db_service.update_or_create_litigante(demandado, existing_causas_ids)
+    if tipo == LitiganteTipo.DEMANDADO:
+        causas_in_db = await litigante_in_db.causas_demandado.all()
+    else:
+        causas_in_db = await litigante_in_db.causas_actor.all()
 
-    new_causas_ids = ["1234", "5678", "9012"]
-    demandados_ids = await db_service.update_or_create_litigante(demandado, new_causas_ids)
-
-    all_ids = set(existing_causas_ids) | set(new_causas_ids)
-
-    assert len(demandados_ids) == 3
-    assert demandados_ids == all_ids
-    assert await Litigante.all().count() == 3
-    assert await Litigante.filter(cedula__in=all_ids).count() == 3
+    assert litigante_id == litigante.cedula == litigante_in_db.cedula
+    assert {causa.idJuicio for causa in causas_in_db} == {existing_causa_id, new_causa_id}

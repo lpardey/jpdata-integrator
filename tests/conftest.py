@@ -28,20 +28,29 @@ def causas_response() -> CausasResponse:
     )
 
 
-@pytest.fixture()
-def informacion_litigante_data() -> dict[str, Any]:
-    filename = Path("tests/fixtures/informacion_litigante.json")
+def read_informacion_litigante(cedula: str) -> dict[str, Any]:
+    filename = Path(f"tests/fixtures/informacion_litigante_{cedula}.json")
     with open(filename, "r") as f:
         return json.load(f)
 
 
 @pytest.fixture
-def raw_informacion_litigante() -> dict[str, Any]:
-    with open("tests/fixtures/informacion_litigante.json") as f:
-        return json.load(f)
+def raw_informacion_litigante_1234() -> dict[str, Any]:
+    return read_informacion_litigante("1234")
 
 
 @pytest.fixture
-def informacion_litigante(raw_informacion_litigante: dict[str, Any]) -> InformacionLitigante:
-    data = InformacionLitigante(**raw_informacion_litigante)
+def raw_informacion_litigante_5678() -> dict[str, Any]:
+    return read_informacion_litigante("5678")
+
+
+@pytest.fixture
+def informacion_litigante_1234(raw_informacion_litigante_1234: dict[str, Any]) -> InformacionLitigante:
+    data = InformacionLitigante(**raw_informacion_litigante_1234)
+    return data
+
+
+@pytest.fixture
+def informacion_litigante_5678(raw_informacion_litigante_5678: dict[str, Any]) -> InformacionLitigante:
+    data = InformacionLitigante(**raw_informacion_litigante_5678)
     return data
