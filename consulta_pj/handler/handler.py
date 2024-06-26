@@ -8,8 +8,8 @@ from consulta_pj.time_decorator import time_async
 from .schemas import ProcessResponse
 
 
-async def process_actores_info(cedulas_actores: list[str], max_concurrency: int = 15) -> None:
-    tasks = [process_litigante(actor, LitiganteTipo.ACTOR) for actor in cedulas_actores]
+async def process_actores(cedulas_actores: list[str], max_concurrency: int = 15) -> None:
+    tasks = [process_litigante(cedula, LitiganteTipo.ACTOR) for cedula in cedulas_actores]
     tasks_with_progress = (
         log_progress("Actor", index, len(cedulas_actores), task, level=logging.WARNING)
         for index, task in enumerate(tasks)
@@ -17,10 +17,10 @@ async def process_actores_info(cedulas_actores: list[str], max_concurrency: int 
     await gather_with_concurrency(max_concurrency, tasks_with_progress)
 
 
-async def process_demandados_info(cedulas_demandados: list[str], max_concurrency: int = 15) -> None:
-    tasks = [process_litigante(actor, LitiganteTipo.DEMANDADO) for actor in cedulas_demandados]
+async def process_demandados(cedulas_demandados: list[str], max_concurrency: int = 15) -> None:
+    tasks = [process_litigante(cedula, LitiganteTipo.DEMANDADO) for cedula in cedulas_demandados]
     tasks_with_progress = (
-        log_progress("Actor", index, len(cedulas_demandados), task, level=logging.WARNING)
+        log_progress("Demandado", index, len(cedulas_demandados), task, level=logging.WARNING)
         for index, task in enumerate(tasks)
     )
     await gather_with_concurrency(max_concurrency, tasks_with_progress)
@@ -29,7 +29,7 @@ async def process_demandados_info(cedulas_demandados: list[str], max_concurrency
 @time_async
 async def process_litigante(cedula: str, tipo: LitiganteTipo) -> ProcessResponse | None:
     try:
-        if tipo.ACTOR:
+        if tipo == LitiganteTipo.ACTOR:
             data = await crawler.get_actor_info(cedula)
         else:
             data = await crawler.get_demandado_info(cedula)
@@ -77,6 +77,7 @@ async def process_causa(causa: CausaSchema) -> tuple[str, str]:
             for movimiento in causa.movimientos
             for incidente in movimiento.incidentes
         ]
+        
         await db_service.bulk_create_incidente(incidentes)
 
         actuaciones_requests = [
