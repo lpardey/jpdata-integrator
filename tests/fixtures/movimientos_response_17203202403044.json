@@ -1,0 +1,40 @@
+[
+    {
+        "idJudicatura": "17203",
+        "nombreJudicatura": "UNIDAD JUDICIAL DE FAMILIA, MUJER, NIÑEZ  y ADOLESCENCIA CON SEDE EN LA PARROQUIA MARISCAL SUCRE DEL DISTRITO METROPOLITANO DE QUITO, PROVINCIA DE PICHINCHA",
+        "ciudad": "QUITO",
+        "lstIncidenteJudicatura": [
+            {
+                "idIncidenteJudicatura": 27803279,
+                "idMovimientoJuicioIncidente": 26424934,
+                "idJudicaturaDestino": "17203",
+                "fechaCrea": "2024-06-21T08:49:30.053",
+                "incidente": 1,
+                "lstLitiganteActor": [
+                    {
+                        "tipoLitigante": "ACTOR",
+                        "nombresLitigante": "MAGALY ELIZABETH  MONTALVAN MACAS",
+                        "representadoPor": "MAGALY ELIZABETH  MONTALVAN MACAS",
+                        "idLitigante": 42903970
+                    },
+                    {
+                        "tipoLitigante": "ACTOR",
+                        "nombresLitigante": "ROBALINO OCAÑA PABLO RAFAEL",
+                        "representadoPor": "ROBALINO OCAÑA PABLO RAFAEL",
+                        "idLitigante": 27586513
+                    }
+                ],
+                "lstLitiganteDemandado": [
+                    {
+                        "tipoLitigante": "DEMANDADO",
+                        "nombresLitigante": "CUSCO ECHEVERRIA ROMEL MAURICIO",
+                        "representadoPor": "CUSCO ECHEVERRIA ROMEL MAURICIO",
+                        "idLitigante": 32576632
+                    }
+                ],
+                "litiganteActor": null,
+                "litiganteDemandado": null
+            }
+        ]
+    }
+]

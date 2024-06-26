@@ -1,0 +1,201 @@
+{
+    "litigante": {
+        "cedula": "1234",
+        "nombre": "",
+        "tipo": "ACTOR"
+    },
+    "causas": [
+        {
+            "idJuicio": "12283202402129",
+            "nombreDelito": "385 CONDUCCI\u00d3N DE VEH\u00cdCULO EN ESTADO DE EMBRIAGUEZ, NUM. 3",
+            "fechaIngreso": "2024-06-22 17:48:22.710000+00:00",
+            "movimientos": [
+                {
+                    "idMovimiento": 26430516,
+                    "judicatura": {
+                        "idJudicatura": "12283",
+                        "nombre": "UNIDAD JUDICIAL PENAL CON SEDE EN EL CANT\u00d3N QUEVEDO",
+                        "ciudad": "QUEVEDO"
+                    },
+                    "incidentes": [
+                        {
+                            "idIncidente": 27810148,
+                            "fechaCrea": "2024-06-22 12:48:22.710000",
+                            "actores": [
+                                {
+                                    "idImplicado": 36879219,
+                                    "nombre": "POLICIA NACIONAL",
+                                    "representante": "POLICIA NACIONAL"
+                                },
+                                {
+                                    "idImplicado": 33238639,
+                                    "nombre": "ZAMBRANO PACHECO JORGE JAVIER",
+                                    "representante": "ZAMBRANO PACHECO JORGE JAVIER"
+                                }
+                            ],
+                            "demandados": [],
+                            "actuaciones": [
+                                {
+                                    "codigo": 216025717,
+                                    "fecha": "2024-06-22 21:52:40+00:00",
+                                    "tipo": "Acta Resumen                                                                                                                                                                                                                                              ",
+                                    "actividad": "BUENO UNA VEZ QUE HEMOS ESCUCHADO LAS CIRCUNSTANCIAS DE LA DETENCI\u00d3N  DEL SE\u00d1OR  ZAMBRANO PACHECO JORGE JAVIER, SE   CALIFICA LEGAL LA ACTUACI\u00d3N Y TAMBI\u00c9N OPORTUNA EN LA DETENCI\u00d3N  DEL SE\u00d1OR  ZAMBRANO LOOR DARWIN DANIEL, EL AGENTE POLICIAL ZAMBRANO LOOR DARWIN DANIEL, INDICA QUE NO SE HA QUERIDO PRACTICAR EL EXAMEN DE ALCPHOTESH PERO SIN EMBARGO NO TENEMOS LA PRUEBA DE PSICOSOM\u00c1TICA, LOS AGENTES POLICIALES,  TEN\u00cdAN LA OBLIGACI\u00d3N DE HABERLE PRACTICADO, LO CUAL NO TENEMOS EN ESTA PRESENTE AUDIENCIA POR LO QUE EL SUSCRITO JUEZ RESUELVE  DICTAR SENTENCIA RATIFICANDO EL ESTADO DE INOCENCIA ZAMBRANO PACHECO JORGE JAVIER,  CONSIDERANDO AS\u00cd MISMO QUE LA ACTUACI\u00d3N DE POLIC\u00cdA ES LEGAL Y OPORTUNO DEL PRESENTE HECHO MUCHAS GRACIAS MUY BUENAS TARDES El contenido de la audiencia reposa en el archivo de la Judicatura. La presente acta queda debidamente suscrita conforme lo dispone la Ley, por la/el Secretaria/o del/de la UNIDAD JUDICIAL PENAL CON SEDE EN EL CANT\u00d3N QUEVEDO,el mismo que certifica su contenido. Las partes quedan notificadas con las decisiones adoptadas en la presente audiencia sin perjuicio de lo dispuesto en la Ley respecto de su notificaci\u00f3n escrita en las casillas judiciales que las partes procesales han se\u00f1alado para tal efecto.",
+                                    "nombreArchivo": "Acta Resumen"
+                                },
+                                {
+                                    "codigo": 216024236,
+                                    "fecha": "2024-06-22 17:55:47.980000+00:00",
+                                    "tipo": "CONVOCATORIA AUDIENCIA DE PROCEDIMIENTO EXPEDITO-CONTRAVENCIONES DE TRANSITO (RAZON DE NOTIFICACION) ",
+                                    "actividad": "<p style=\"text-align: justify;\">En Quevedo, s\u00e1bado veinte y dos de junio del dos mil veinte y cuatro, a partir de las doce horas y cincuenta y cinco minutos, mediante boletas judiciales notifiqu\u00e9 el DECRETO que antecede a: POLICIA NACIONAL en el correo electr\u00f3nico  zambrano.d1979@gmail.com. ZAMBRANO PACHECO JORGE JAVIER en el correo electr\u00f3nico  fsimba@defensoria.gob.ec.  Certifico:</p><br /><br /><br /><br /><br /><br /><p style=\"text-align:center\"><strong>IZA  CHILIQUINGA LUIS ROLANDO</strong>\r\n  </p>\n\r<p style=\"text-align:center\"><strong>SECRETARIO/A</strong>\r\n  </p>",
+                                    "nombreArchivo": "12283202402129_234918758_12_55_47_P21.pdf"
+                                },
+                                {
+                                    "codigo": 216024236,
+                                    "fecha": "2024-06-22 17:54:19+00:00",
+                                    "tipo": "CONVOCATORIA AUDIENCIA DE PROCEDIMIENTO EXPEDITO-CONTRAVENCIONES DE TRANSITO (DECRETO) ",
+                                    "actividad": "<p style=\"margin-left:0cm; margin-right:0cm; text-align:justify\">Visto.- En mi calidad de Juez de la Unidad Penal de Quevedo, de Los R&iacute;os, mediante Acci&oacute;n de Personal N&deg;3607, DNTH-2014 de fecha 08 de Mayo del 2014, suscrito por la se&ntilde;ora Econ. Andrea Bravo Mogro, Directora General del Consejo de la Judicatura, cuya copia certificada se manda agregar al expediente. Avoco conocimiento de la presente causa.- En m&eacute;rito al parte policial No. 2024062202344277812, &nbsp;en el que se indica la detenci&oacute;n del se&ntilde;or <strong>ZAMBRANO PACHECO JORGE JAVIER, </strong>,&nbsp;por CONTRAVENCION DE TRANSITO, se se&ntilde;ala para el d&iacute;a&nbsp; 22 de Junio &nbsp;&nbsp; del 2024 a las 14H40, para que se lleve a efecto la Audiencia de FLAGRANCIA EN PROCEDIMIENTO EXPEDITO, &nbsp;por no haber sido designado defensor particular por parte de los presuntos sospechosos, notif&iacute;quese al Defensor P&uacute;blico de turno; se ordena la comparecencia en esta diligencia de los miembros policiales quienes realizaron la correspondiente detenci&oacute;n.- actu&eacute; el abogado Iza Chiliquinga Luis Rolando secretario de la Unidad Judicial Penal de Quevedo. C&uacute;mplase y Notif&iacute;quese.</p>\n",
+                                    "nombreArchivo": "12283202402129_234918751_12_54_36_P20.pdf"
+                                },
+                                {
+                                    "codigo": 16076301,
+                                    "fecha": "2024-06-22 17:48:23.550000+00:00",
+                                    "tipo": "ACTA DE SORTEO",
+                                    "actividad": "Recibida el d\u00eda de hoy, s\u00e1bado 22 de junio de 2024, a las 12:48 la petici\u00f3n de Audiencia de Formulaci\u00f3n de Cargos, por el Delito FLAGRANTE de Tipo de acci\u00f3n: CONTRAVENCIONES DE TR\u00c1NSITO,   presentado por: ZAMBRANO PACHECO JORGE JAVIER; , POLICIA NACIONAL,   Por sorteo correspondi\u00f3 a JUEZ: Doctor Barzola Miranda Freddy Artemio, SECRETARIO: Abg Iza Chiliquinga Luis Rolando, en (el/la) \nUNIDAD JUDICIAL PENAL CON SEDE EN EL CANT\u00d3N QUEVEDO con el proceso n\u00famero: 12283-2024-02129 (1) Primera Instancia , con n\u00famero de parte sd.Al que se adjunta los siguientes documentos:\n1) PETICI\u00d3N INICIAL (ORIGINAL)\n2) PARTE EN 5 FOJAS (ORIGINAL)\n\nTotal de fojas: 5\n\nQUEVEDO,  s\u00e1bado 22 de junio de 2024.",
+                                    "nombreArchivo": "ACTA DE SORTEO_26430516"
+                                },
+                                {
+                                    "codigo": 159877044,
+                                    "fecha": "2024-06-22 17:48:22+00:00",
+                                    "tipo": "CARATULA DE JUICIO",
+                                    "actividad": "<b>CARATULA</b>",
+                                    "nombreArchivo": "CARATULA DE JUICIO_26430516"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "idJuicio": "17203202403044",
+            "nombreDelito": "DIVORCIO POR CAUSAL",
+            "fechaIngreso": "2024-06-21 13:49:30.053000+00:00",
+            "movimientos": [
+                {
+                    "idMovimiento": 26424934,
+                    "judicatura": {
+                        "idJudicatura": "17203",
+                        "nombre": "UNIDAD JUDICIAL DE FAMILIA, MUJER, NI\u00d1EZ  y ADOLESCENCIA CON SEDE EN LA PARROQUIA MARISCAL SUCRE DEL DISTRITO METROPOLITANO DE QUITO, PROVINCIA DE PICHINCHA",
+                        "ciudad": "QUITO"
+                    },
+                    "incidentes": [
+                        {
+                            "idIncidente": 27803279,
+                            "fechaCrea": "2024-06-21 08:49:30.053000",
+                            "actores": [
+                                {
+                                    "idImplicado": 42903970,
+                                    "nombre": "MAGALY ELIZABETH  MONTALVAN MACAS",
+                                    "representante": "MAGALY ELIZABETH  MONTALVAN MACAS"
+                                },
+                                {
+                                    "idImplicado": 27586513,
+                                    "nombre": "ROBALINO OCA\u00d1A PABLO RAFAEL",
+                                    "representante": "ROBALINO OCA\u00d1A PABLO RAFAEL"
+                                }
+                            ],
+                            "demandados": [
+                                {
+                                    "idImplicado": 32576632,
+                                    "nombre": "CUSCO ECHEVERRIA ROMEL MAURICIO",
+                                    "representante": "CUSCO ECHEVERRIA ROMEL MAURICIO"
+                                }
+                            ],
+                            "actuaciones": [
+                                {
+                                    "codigo": 16070661,
+                                    "fecha": "2024-06-21 13:49:31.283000+00:00",
+                                    "tipo": "ACTA DE SORTEO",
+                                    "actividad": "Recibido en la ciudad de Quito el d\u00eda de hoy, viernes 21 de junio de 2024, a las 08:49,  el proceso  de Familia Mujer Ni\u00f1ez y Adolescencia, Tipo de procedimiento: Sumario por Asunto: Divorcio por causal, seguido  por: Robalino Oca\u00f1a Pablo Rafael, Magaly Elizabeth Montalvan Macas, en contra de: Cusco Echeverria Romel Mauricio. \n\nPor sorteo de ley la competencia se radica en la UNIDAD JUDICIAL DE FAMILIA, MUJER, NI\u00d1EZ  y ADOLESCENCIA CON SEDE EN LA PARROQUIA MARISCAL SUCRE DEL DISTRITO METROPOLITANO DE QUITO, PROVINCIA DE PICHINCHA, conformado por Juez(a): Guzman Mejia Ketty Magaly. Secretaria(o): Gordillo Sahona Martha Azucena. \n\nProceso n\u00famero: 17203-2024-03044 (1) Primera InstanciaAl que se adjunta los siguientes documentos:\n1) PETICI\u00d3N INICIAL (ORIGINAL)\n2) RESOLUCI\u00d3N DE JUICIO N\u00b0 1795220111244, PROCURACI\u00d3N JUDICIAL. (COPIAS CERTIFICADAS/COMPULSA)\n3) CERTIFICADO DE MATRIMONIO (FIRMA DIGITAL), CERTIFICADO DE NACIMIENTO (FIRMA DIGITAL), C\u00c9DULAS Y PAPELETAS DE VOTACI\u00d3N, CREDENCIAL DE POLIC\u00cdA NACIONAL, CROQUIS Y FOTOGRAF\u00cdA DE UBICACI\u00d3N, CREDENCIALES DE ABOGADO. (COPIA SIMPLE)\n\nTotal de fojas: 24 ROSA IRENE ORT\u00cdZ GARCIA Responsable de sorteo",
+                                    "nombreArchivo": "ACTA DE SORTEO_26424934"
+                                },
+                                {
+                                    "codigo": 159723048,
+                                    "fecha": "2024-06-21 13:49:30+00:00",
+                                    "tipo": "CARATULA DE JUICIO",
+                                    "actividad": "<b>CARATULA</b>",
+                                    "nombreArchivo": "CARATULA DE JUICIO_26424934"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "idJuicio": "08256202400340",
+            "nombreDelito": "INSCRIPCI\u00d3N TARD\u00cdA DE NACIMIENTO",
+            "fechaIngreso": "2024-06-20 22:15:29.597000+00:00",
+            "movimientos": [
+                {
+                    "idMovimiento": 26424442,
+                    "judicatura": {
+                        "idJudicatura": "08256",
+                        "nombre": "UNIDAD JUDICIAL MULTICOMPETENTE DE SAN LORENZO",
+                        "ciudad": "SAN LORENZO"
+                    },
+                    "incidentes": [
+                        {
+                            "idIncidente": 27802775,
+                            "fechaCrea": "2024-06-20 17:15:29.597000",
+                            "actores": [
+                                {
+                                    "idImplicado": 42903341,
+                                    "nombre": "LUZ MIRIAN PORTOCARRERO BRANDA",
+                                    "representante": "LUZ MIRIAN PORTOCARRERO BRANDA"
+                                }
+                            ],
+                            "demandados": [
+                                {
+                                    "idImplicado": 42903377,
+                                    "nombre": "DIRECCION GENERAL DE REGISTRO CIVIL, IDENTIFICACION Y CEDULACION",
+                                    "representante": "DIRECCION GENERAL DE REGISTRO CIVIL, IDENTIFICACION Y CEDULACION"
+                                }
+                            ],
+                            "actuaciones": [
+                                {
+                                    "codigo": 216011181,
+                                    "fecha": "2024-06-21 22:04:17.540000+00:00",
+                                    "tipo": "CALIFICACION DE SOLICITUD Y/O DEMANDA (RAZON DE NOTIFICACION) ",
+                                    "actividad": "<p style=\"text-align: justify;\">En San Lorenzo, viernes veinte y uno de junio del dos mil veinte y cuatro, a partir de las diecisiete horas y cuatro minutos, mediante boletas judiciales notifiqu\u00e9 el AUTO DE SUSTANCIACI\u00d3N que antecede a: LUZ MIRIAN PORTOCARRERO BRANDA en el casillero electr\u00f3nico No.0801490251 correo electr\u00f3nico  ramirobartolomebennettquintero@yahoo.es.  del Dr./Ab. RAMIRO BARTOLOME BENNETT QUINTERO;  No se notifica a: DIRECCION GENERAL DE REGISTRO CIVIL, IDENTIFICACION Y CEDULACION,  por no haber se\u00f1alado casillero electr\u00f3nico.  Certifico:</p><br /><br /><br /><br /><br /><br /><p style=\"text-align:center\"><strong>CORTEZ PEREA NUVIA MARIA</strong>\r\n  </p>\n\r<p style=\"text-align:center\"><strong>SECRETARIA</strong>\r\n  </p>",
+                                    "nombreArchivo": "08256202400340_234908866_17_4_16_P21.pdf"
+                                },
+                                {
+                                    "codigo": 216011181,
+                                    "fecha": "2024-06-21 20:50:24+00:00",
+                                    "tipo": "CALIFICACION DE SOLICITUD Y/O DEMANDA (AUTO DE SUSTANCIACION) ",
+                                    "actividad": "<p style=\"text-align:justify\"><span style=\"font-size:13pt\">VISTOS</span><span style=\"font-size:13pt\">: </span><span style=\"font-size:13pt\">Dra. Eugenia Galarza Mayorga, en mi calidad de Jueza Titular de la Unidad Judicial Multicompetente, con sede en el Cant&oacute;n San Lorenzo, Provincia de Esmeraldas, seg&uacute;n se desprende de la Resoluci&oacute;n del Pleno del Consejo de la Judicatura signado con el No.219-2023, de fecha 29 de diciembre de 2023 y Acci&oacute;n de Personal Nro. 0240-DNTH-2024-MS, de fecha 23 de enero de 2024, suscrito por el Dr. Holguer Jaime Canseco Guerrero, Director General del Consejo de la Judicatura: continuando con la tramitaci&oacute;n de la presente causa: </span><span style=\"font-size:13pt\">PRIMERO </span><span style=\"font-size:13pt\">&nbsp;Avoco conocimiento de la presente causa, </span><span style=\"font-size:13pt\">DE INSCRIPCION TARDIA DE NACIMIENTO</span><span style=\"font-size:13pt\">, signada con el Nro. </span><span style=\"font-size:13pt\">08256_2024_00340</span><span style=\"font-size:13pt\">. La misma que ha sido incoada por </span><span style=\"font-size:13pt\">LUZ MIRIAN PORTOCARRERO BRANDA, </span><span style=\"font-size:13pt\">en contra del Director General de Registro Civil Identificaci&oacute;n y Cedulaci&oacute;n as&iacute; como tambi&eacute;n en contra de la Procuradur&iacute;a General del Estado. </span><span style=\"font-size:13pt\">SEGUNDO CALIFICACI&Oacute;N DE LA DEMANDA</span><span style=\"font-size:13pt\"> .- En lo principal: La demanda que antecede&nbsp; es clara, precisa y re&uacute;ne los requisitos legales previstos en los art&iacute;culos 142 y 143 del C&oacute;digo Org&aacute;nico General de Procesos (COGEP); por lo expuesto, se califica la demanda y se admite a tr&aacute;mite mediante procedimiento Ordinario, conforme lo establece el Art. 289 COGEP.- </span><span style=\"font-size:13pt\">TERCERO CITACION </span><span style=\"font-size:13pt\">Se ordena la citaci&oacute;n al demandado: a) DIRECTOR GENERAL DE REGISTRO CIVIL, IDENTIFICACION Y CEDULACION, o quien lo represente en la sede San Lorenzo, ubicado en sus oficinas ubicadas en el Barrio Nuevos Horizontes, calle Esmeraldas y Armada Nacional referencia junto al Terminal Terrestre de San Lorenzo,&nbsp; y </span><span style=\"font-size:13pt\">b) </span><span style=\"font-size:13pt\">PROCURADURIA GENERAL DEL ESTADO,&nbsp; en sus oficinas ubicadas en Av. Amazonas Nro. 39123 y Ar&iacute;zaga, todas dos direcciones del Cant&oacute;n del Distrito Metropolitano de Quito, Provincia de Pichincha, para cuya citaci&oacute;n se remitir&aacute; atento </span><span style=\"font-size:13pt\">DEPRECATORIO VIRTUA L</span><span style=\"font-size:13pt\"> a uno de los Se&ntilde;ores Jueces de lo Civil, de la Provincia de Pichincha, Cant&oacute;n del Distrito Metropolitano de Quito, Provincia de Pichincha, a fin de que se cite al Sr Procurador General del Estado. Para la citaci&oacute;n se adjuntar&aacute; copia certificada de la demanda, de la documentaci&oacute;n adjunta y copia de este auto inicial. Se concede a los demandados el t&eacute;rmino legal de 30 d&iacute;as, para que contesten la demanda de conformidad a lo establecido en el art&iacute;culo 291 del C&oacute;digo Org&aacute;nico General de Procesos. Se le indica a la parte demandada que tiene la obligaci&oacute;n de se&ntilde;alar casillero judicial y presentar su prueba de manera oportuna. T&eacute;ngase en cuenta el anuncio de las pruebas que han realizado la actora en su demanda, las mismas que ser&aacute;n practicadas en audiencia, siempre y cuando cumplan con los requisitos de pertinencia, utilidad y conducencia previstos en el art. 160 del COGEP.- De igual manera, se tiene en cuenta la designaci&oacute;n y autorizaci&oacute;n concedida por la actora a su defensa t&eacute;cnica Ab Bennett Quintero Ramiro Bartolom&eacute;, as&iacute; como los correos electr&oacute;nicos para recibir sus notificaciones . Siga actuando la Ab. Nuvia Mar&iacute;a Cortez Perea, en su calidad de secretaria titular del despacho </span><span style=\"font-size:13pt\">NOTIFIQUESE_&nbsp; CUMPLASE _ CITESE.</span></p>\n",
+                                    "nombreArchivo": "08256202400340_234886451_15_50_54_P20.pdf"
+                                },
+                                {
+                                    "codigo": 16070167,
+                                    "fecha": "2024-06-20 22:15:31.443000+00:00",
+                                    "tipo": "ACTA DE SORTEO",
+                                    "actividad": "Recibido en la ciudad de San lorenzo el d\u00eda de hoy, jueves 20 de junio de 2024, a las 17:15,  el proceso  de Familia Mujer Ni\u00f1ez y Adolescencia, Tipo de procedimiento: Sumario por Asunto: Inscripci\u00f3n tard\u00eda de nacimiento, seguido  por: Luz Mirian Portocarrero Branda, en contra de: Direccion General de Registro Civil, Identificacion y Cedulacion -  NULL. \n\nPor sorteo de ley la competencia se radica en la UNIDAD JUDICIAL MULTICOMPETENTE DE SAN LORENZO, conformado por Juez(a): Juez Eugenia Marina Galarza Mayorga. Secretaria(o): Cortez Perea Nuvia Maria. \n\nProceso n\u00famero: 08256-2024-00340 (1) Primera InstanciaAl que se adjunta los siguientes documentos:\n1) PETICI\u00d3N INICIAL (ORIGINAL)\n2) RAZ\u00d3N DE NO INSCRIPCI\u00d3N DIRECCI\u00d3N GENERAL DEL REGISTRO CIVIL; Y, DECLARACI\u00d3N JURAMENTADA (COPIAS CERTIFICADAS/COMPULSA)\n3) CREDENCIAL DEL ABOGADO, C\u00c9DULAS DE CIUDADANIA; Y, PAPEL DE VOTACION (COPIA SIMPLE)\n\nTotal de fojas: 11Abogado FELIX EGAS QUINGA Responsable de sorteo",
+                                    "nombreArchivo": "ACTA DE SORTEO_26424442"
+                                },
+                                {
+                                    "codigo": 159701456,
+                                    "fecha": "2024-06-20 22:15:29+00:00",
+                                    "tipo": "CARATULA DE JUICIO",
+                                    "actividad": "<b>CARATULA</b>",
+                                    "nombreArchivo": "CARATULA DE JUICIO_26424442"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

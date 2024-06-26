@@ -1,0 +1,33 @@
+[
+    {
+        "idJudicatura": "12283",
+        "nombreJudicatura": "UNIDAD JUDICIAL PENAL CON SEDE EN EL CANTÓN QUEVEDO",
+        "ciudad": "QUEVEDO",
+        "lstIncidenteJudicatura": [
+            {
+                "idIncidenteJudicatura": 27810148,
+                "idMovimientoJuicioIncidente": 26430516,
+                "idJudicaturaDestino": "12283",
+                "fechaCrea": "2024-06-22T12:48:22.71",
+                "incidente": 1,
+                "lstLitiganteActor": [
+                    {
+                        "tipoLitigante": "ACTOR",
+                        "nombresLitigante": "POLICIA NACIONAL",
+                        "representadoPor": "POLICIA NACIONAL",
+                        "idLitigante": 36879219
+                    },
+                    {
+                        "tipoLitigante": "PERSONA CONTRAVENTORA",
+                        "nombresLitigante": "ZAMBRANO PACHECO JORGE JAVIER",
+                        "representadoPor": "ZAMBRANO PACHECO JORGE JAVIER",
+                        "idLitigante": 33238639
+                    }
+                ],
+                "lstLitiganteDemandado": null,
+                "litiganteActor": null,
+                "litiganteDemandado": null
+            }
+        ]
+    }
+]
