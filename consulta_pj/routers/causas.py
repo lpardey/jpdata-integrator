@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Path
 
+from consulta_pj.crawler.schemas import LitiganteTipo
 from consulta_pj.db_service import DBService
+from consulta_pj.db_service.serializers import SerializedCausaSchema, get_causas_by_cedula
 from consulta_pj.models import (
     Actuacion_Pydantic,
     Causa_Pydantic,
@@ -13,10 +15,9 @@ router = APIRouter(prefix="/causas", tags=["Causas"])
 
 
 # Only for verification
-@router.get("/actores/{cedula}", response_model=list[Causa_Pydantic])
-async def get_causas_actor(cedula: str = Path(..., openapi_examples=CAUSA_EXAMPLE)):
-    db_service = DBService()
-    response = await db_service.get_causas_by_actor_id(cedula)
+@router.get("/actores/{cedula}")
+async def get_causas_actor(cedula: str = Path(..., openapi_examples=CAUSA_EXAMPLE)) -> list[SerializedCausaSchema]:
+    response = await get_causas_by_cedula(cedula, LitiganteTipo.ACTOR)
     return response
 
 
