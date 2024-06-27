@@ -23,6 +23,8 @@ asyncpg==0.29.0
     # via tortoise-orm
 attrs==23.2.0
     # via aiohttp
+backoff==2.2.1
+    # via prueba-tusdatos (pyproject.toml)
 brotli==1.1.0
     # via aiohttp
 certifi==2024.6.2

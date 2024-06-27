@@ -1,6 +1,6 @@
 from consulta_pj.crawler.schemas import InformacionLitigante
+from consulta_pj.db_service.models import Litigante
 from consulta_pj.handler import handler
-from consulta_pj.models import Litigante
 
 
 async def test_handler_persist_causas(informacion_litigante_1234: InformacionLitigante, in_memory_db):

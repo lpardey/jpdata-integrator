@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from consulta_pj.models import Actuacion, Causa, Implicado, Incidente, Litigante, Movimiento
+from consulta_pj.db_service.models import Actuacion, Causa, Implicado, Incidente, Litigante, Movimiento
 
 router = APIRouter(prefix="/stats", tags=["Statistics"])
 
