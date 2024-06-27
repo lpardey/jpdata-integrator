@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from tortoise import Tortoise, fields
-from tortoise.contrib.pydantic import pydantic_model_creator
+from tortoise import fields
 from tortoise.models import Model
 
 
@@ -88,9 +87,3 @@ class Actuacion(Model):
     tipo = fields.TextField()
     actividad = fields.TextField()
     nombreArchivo = fields.CharField(max_length=255, null=True)
-
-
-Tortoise.init_models(["consulta_pj.models"], "models")
-Causa_Pydantic = pydantic_model_creator(Causa)
-Movimiento_Pydantic = pydantic_model_creator(Movimiento, exclude=("causa", "judicatura"))
-Actuacion_Pydantic = pydantic_model_creator(Actuacion, exclude=("judicatura", "incidente"))

@@ -1,5 +1,3 @@
-from tortoise.contrib.pydantic import PydanticModel
-
 from consulta_pj.crawler import (
     CausaSchema,
     ImplicadoSchema,
@@ -11,13 +9,11 @@ from consulta_pj.crawler import (
 from consulta_pj.models import (
     Actuacion,
     Causa,
-    Causa_Pydantic,
     Implicado,
     Incidente,
     Judicatura,
     Litigante,
     Movimiento,
-    Movimiento_Pydantic,
 )
 
 from .schemas import CreateActuacionRequest, CreateIncidenteRequest
@@ -221,18 +217,6 @@ class DBService:
         await Actuacion.bulk_create(new_actuaciones, ignore_conflicts=True)
         return [actuacion.uuid for actuacion in new_actuaciones]
 
-    async def get_causas_by_actor_id(self, cedula: str) -> list[PydanticModel]:
-        actor = await Litigante.get(cedula=cedula).prefetch_related("causas_actor")
-        raw_causas = await actor.causas_actor.all()
-        causas = [await Causa_Pydantic.from_tortoise_orm(causa) for causa in raw_causas]
-        return causas
-
-    async def get_causas_by_demandado_id(self, cedula: str) -> list[PydanticModel]:
-        demandado = await Litigante.get(cedula=cedula).prefetch_related("causas_demandado")
-        raw_causas = await demandado.causas_demandado.all()
-        causas = [await Causa_Pydantic.from_tortoise_orm(causa) for causa in raw_causas]
-        return causas
-
     async def get_causas_ids_by_actor_id(self, cedula: str) -> list[str]:
         actor = await Litigante.get(cedula=cedula).prefetch_related("causas_actor")
         causas: list[str] = await actor.causas_actor.all().values_list("idJuicio", flat=True)  # type: ignore
@@ -242,18 +226,6 @@ class DBService:
         demandado = await Litigante.get(cedula=cedula).prefetch_related("causas_demandado")
         causas: list[str] = await demandado.causas_demandado.all().values_list("idJuicio", flat=True)  # type: ignore
         return causas
-
-    async def get_moviminetos_by_actor_id(self, cedula: str) -> list[PydanticModel]:
-        actor = await Litigante.get(cedula=cedula).prefetch_related("causas_actor__movimientos__judicatura")
-        raw_movimientos = [movimiento for causa in actor.causas_actor for movimiento in causa.movimientos]
-        movimientos = [await Movimiento_Pydantic.from_tortoise_orm(movimiento) for movimiento in raw_movimientos]
-        return movimientos
-
-    async def get_moviminetos_by_demandado_id(self, cedula: str) -> list[PydanticModel]:
-        demandado = await Litigante.get(cedula=cedula).prefetch_related("causas_demandado__movimientos__judicatura")
-        raw_movimientos = [movimiento for causa in demandado.causas_demandado for movimiento in causa.movimientos]
-        movimientos = [await Movimiento_Pydantic.from_tortoise_orm(movimiento) for movimiento in raw_movimientos]
-        return movimientos
 
     async def get_causas_by_cedula(self, cedula: str, tipo: LitiganteTipo) -> list[SerializedCausaSchema]:
         if tipo == LitiganteTipo.ACTOR:
@@ -270,5 +242,21 @@ class DBService:
     async def get_actuaciones_by_incidente(self, incidente_id: int) -> list[SerializedActuacionSchema]:
         incidente = await Incidente.get(idIncidente=incidente_id).prefetch_related("actuaciones")
         actuaciones_raw = await incidente.actuaciones.all()
+        actuaciones = [SerializedActuacionSchema.model_validate(actuacion) for actuacion in actuaciones_raw]
+        return actuaciones
+
+    async def get_serialized_causas_by_id(self, causas_ids: list[str]) -> list[SerializedCausaSchema]:
+        raw_causas = await Causa.filter(idJuicio__in=causas_ids).prefetch_related(
+            "actores", "demandados", "movimientos__incidentes", "movimientos__incidentes__judicatura"
+        )
+        causas = [await _serialize_causa(causa) for causa in raw_causas]
+        return causas
+
+    async def get_all_causas_ids(self) -> list[str]:
+        causas = await Causa.all().values_list("idJuicio", flat=True)  # type: ignore
+        return causas
+
+    async def get_actuaciones_by_causa_id(self, causa_id: str) -> list[SerializedActuacionSchema]:
+        actuaciones_raw = await Actuacion.filter(incidente__movimiento__causa__idJuicio=causa_id)
         actuaciones = [SerializedActuacionSchema.model_validate(actuacion) for actuacion in actuaciones_raw]
         return actuaciones

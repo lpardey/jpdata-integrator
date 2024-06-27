@@ -27,7 +27,7 @@ async def process_demandados(cedulas_demandados: list[str], max_concurrency: int
 
 
 @time_async
-async def process_litigante(cedula: str, tipo: LitiganteTipo) -> ProcessResponse | None:
+async def process_litigante(cedula: str, tipo: LitiganteTipo, raise_on_error: bool = False) -> ProcessResponse | None:
     try:
         if tipo == LitiganteTipo.ACTOR:
             data = await crawler.get_actor_info(cedula)
@@ -38,6 +38,8 @@ async def process_litigante(cedula: str, tipo: LitiganteTipo) -> ProcessResponse
     except Exception as e:
         logging.exception(e)
         logging.error("Error processing demandado")
+        if raise_on_error:
+            raise e
     return None
 
 
@@ -77,7 +79,7 @@ async def process_causa(causa: CausaSchema) -> tuple[str, str]:
             for movimiento in causa.movimientos
             for incidente in movimiento.incidentes
         ]
-        
+
         await db_service.bulk_create_incidente(incidentes)
 
         actuaciones_requests = [
