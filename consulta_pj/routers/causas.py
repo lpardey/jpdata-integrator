@@ -1,17 +1,24 @@
-from fastapi import APIRouter, Path
+from typing import Annotated
+
+from fastapi import APIRouter, Path, Query
 from fastapi.exceptions import HTTPException
 
 from consulta_pj.crawler.schemas import LitiganteTipo
 from consulta_pj.db_service import DBService
 from consulta_pj.db_service.serializers import SerializedActuacionSchema, SerializedCausaSchema
 
-from .default_examples import ACTORES_EXAMPLES, ACTUACIONES_EXAMPLE, CAUSA_EXAMPLE, DEMANDADOS_EXAMPLES
+from .default_examples import (
+    ACTORES_EXAMPLES,
+    ACTUACIONES_EXAMPLE,
+    CAUSA_BY_ID_EXAMPLE,
+    DEMANDADOS_EXAMPLES,
+)
 
 router = APIRouter(prefix="/causas", tags=["Causas"])
 
 
 @router.get("/")
-async def get_causas_by_id(causas_ids: list[str]) -> list[SerializedCausaSchema]:
+async def get_causas_by_id(causas_ids: Annotated[list[str], Query()]) -> list[SerializedCausaSchema]:
     """
     Returns the detailed information of all causas/procesos in the list of causas_ids/idJuicios
     """
@@ -31,12 +38,12 @@ async def get_all_causas_ids() -> list[str]:
 
 
 @router.get("/{idJuicio}")
-async def get_causa_by_id(idJuicio: str = Path(..., openapi_examples=CAUSA_EXAMPLE)) -> SerializedCausaSchema:
+async def get_causa_by_id(idJuicio: str = Path(..., openapi_examples=CAUSA_BY_ID_EXAMPLE)) -> SerializedCausaSchema:
     """
     Returns the detailed information of the causa/proceso with the given causa_id/idJuicio
     """
     db_service = DBService()
-    response = await db_service.get_serialized_causas_by_id(idJuicio)
+    response = await db_service.get_serialized_causas_by_id([idJuicio])
     if not response:
         raise HTTPException(404, detail="Causa not found")
     return response[0]

@@ -13,7 +13,7 @@ from consulta_pj.crawler.schemas import InformacionLitigante
 
 @pytest.fixture()
 async def in_memory_db():
-    config = getDBConfig(app_label="models", modules=["consulta_pj.models"])
+    config = getDBConfig(app_label="models", modules=["consulta_pj.db_service.models"])
     await _init_db(config)
     yield
     await Tortoise._drop_databases()

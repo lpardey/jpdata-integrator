@@ -2,7 +2,7 @@ import pytest
 
 from consulta_pj.crawler.schemas import InformacionLitigante, LitiganteSchema, LitiganteTipo
 from consulta_pj.db_service import DBService
-from consulta_pj.models import Causa, Litigante
+from consulta_pj.db_service.models import Causa, Litigante
 
 
 @pytest.fixture(autouse=True)

@@ -6,7 +6,7 @@ from consulta_pj.crawler import (
     LitiganteTipo,
     MovimientoSchema,
 )
-from consulta_pj.models import (
+from consulta_pj.db_service.models import (
     Actuacion,
     Causa,
     Implicado,
@@ -184,7 +184,7 @@ class DBService:
         )
         return actuacion_object.codigo
 
-    async def update_or_create_actuacion(self, request: CreateActuacionRequest) -> int:
+    async def update_or_create_actuacion(self, request: CreateActuacionRequest) -> str:
         actuacion_object, _ = await Actuacion.update_or_create(
             uuid=request.actuacion.uuid,
             defaults={
@@ -200,7 +200,7 @@ class DBService:
         )
         return actuacion_object.uuid
 
-    async def bulk_create_actuacion(self, requests: list[CreateActuacionRequest]) -> list[int]:
+    async def bulk_create_actuacion(self, requests: list[CreateActuacionRequest]) -> list[str]:
         new_actuaciones = [
             Actuacion(
                 uuid=request.actuacion.uuid,
@@ -253,7 +253,7 @@ class DBService:
         return causas
 
     async def get_all_causas_ids(self) -> list[str]:
-        causas = await Causa.all().values_list("idJuicio", flat=True)  # type: ignore
+        causas: list[str] = await Causa.all().values_list("idJuicio", flat=True)  # type: ignore
         return causas
 
     async def get_actuaciones_by_causa_id(self, causa_id: str) -> list[SerializedActuacionSchema]:

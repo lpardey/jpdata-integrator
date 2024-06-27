@@ -2,9 +2,9 @@ import pytest
 
 from consulta_pj.crawler.schemas import InformacionLitigante
 from consulta_pj.db_service import DBService
+from consulta_pj.db_service.models import Actuacion
 from consulta_pj.db_service.serializers import _serialize_grouped_movimientos_list
 from consulta_pj.handler import handler
-from consulta_pj.models import Actuacion
 
 
 @pytest.fixture()

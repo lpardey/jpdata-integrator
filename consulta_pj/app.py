@@ -17,7 +17,7 @@ app.include_router(causas_router)
 register_tortoise(
     app,
     db_url="sqlite://db.sqlite3",
-    modules={"models": ["consulta_pj.models"]},
+    modules={"models": ["consulta_pj.db_service.models"]},
     generate_schemas=True,
     add_exception_handlers=True,
 )

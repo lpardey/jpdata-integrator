@@ -5,7 +5,7 @@ from typing import Iterable
 from pydantic import BaseModel, ConfigDict
 
 from consulta_pj.crawler.schemas import JudicaturaSchema, LitiganteSchema, LitiganteTipo
-from consulta_pj.models import Causa, Incidente, Judicatura
+from consulta_pj.db_service.models import Causa, Incidente, Judicatura
 
 
 class SerializedActuacionSchema(BaseModel):
@@ -57,7 +57,7 @@ class SerializedCausaSchema(BaseModel):
     movimientos: list[GroupedMovimientosSchema]
 
 
-async def _serialize_grouped_movimientos_list(idJuicio: int) -> list[GroupedMovimientosSchema]:
+async def _serialize_grouped_movimientos_list(idJuicio: str) -> list[GroupedMovimientosSchema]:
     incidentes_raw = (
         await Incidente.filter(movimiento__causa__idJuicio=idJuicio)
         .prefetch_related("judicatura")
@@ -91,12 +91,12 @@ async def _serialize_causa(causa: Causa) -> SerializedCausaSchema:
 async def _serialize_grouped_movimiento(
     judicatura_id: int, incidentes: Iterable[Incidente]
 ) -> GroupedMovimientosSchema:
-    incidentes = [await _serialize_incident(incidente) for incidente in incidentes]
+    serialized_incidentes = [await _serialize_incident(incidente) for incidente in incidentes]
     raw_judicatura = await Judicatura.get(idJudicatura=judicatura_id)
     judicatura = JudicaturaSchema(
         idJudicatura=raw_judicatura.idJudicatura, nombre=raw_judicatura.nombreJudicatura, ciudad=raw_judicatura.ciudad
     )
-    grouped_movimiento = GroupedMovimientosSchema(judicatura=judicatura, incidentes=incidentes)
+    grouped_movimiento = GroupedMovimientosSchema(judicatura=judicatura, incidentes=serialized_incidentes)
     return grouped_movimiento
 
 
@@ -108,11 +108,11 @@ async def _serialize_incident(incidente: Incidente) -> SerializedIncidenteSchema
     actores = [SerializedImplicadoSchema.model_validate(actor) for actor in actores_raw]
     demandados = [SerializedImplicadoSchema.model_validate(demandado) for demandado in demandados_raw]
     actuaciones = [SerializedActuacionSchema.model_validate(actuacion) for actuacion in actuaciones_raw]
-
-    return SerializedIncidenteSchema(
+    serialized_incidente = SerializedIncidenteSchema(
         idIncidente=incidente.idIncidente,
         fechaCrea=incidente.fechaCrea,
         actores=actores,
         demandados=demandados,
         actuaciones=actuaciones,
     )
+    return serialized_incidente
