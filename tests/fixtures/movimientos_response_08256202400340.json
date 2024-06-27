@@ -1,0 +1,34 @@
+[
+    {
+        "idJudicatura": "08256",
+        "nombreJudicatura": "UNIDAD JUDICIAL MULTICOMPETENTE DE SAN LORENZO",
+        "ciudad": "SAN LORENZO",
+        "lstIncidenteJudicatura": [
+            {
+                "idIncidenteJudicatura": 27802775,
+                "idMovimientoJuicioIncidente": 26424442,
+                "idJudicaturaDestino": "08256",
+                "fechaCrea": "2024-06-20T17:15:29.597",
+                "incidente": 1,
+                "lstLitiganteActor": [
+                    {
+                        "tipoLitigante": "ACTOR",
+                        "nombresLitigante": "LUZ MIRIAN PORTOCARRERO BRANDA",
+                        "representadoPor": "LUZ MIRIAN PORTOCARRERO BRANDA",
+                        "idLitigante": 42903341
+                    }
+                ],
+                "lstLitiganteDemandado": [
+                    {
+                        "tipoLitigante": "DEMANDADO",
+                        "nombresLitigante": "DIRECCION GENERAL DE REGISTRO CIVIL, IDENTIFICACION Y CEDULACION",
+                        "representadoPor": "DIRECCION GENERAL DE REGISTRO CIVIL, IDENTIFICACION Y CEDULACION",
+                        "idLitigante": 42903377
+                    }
+                ],
+                "litiganteActor": null,
+                "litiganteDemandado": null
+            }
+        ]
+    }
+]

@@ -22,6 +22,7 @@ class ImplicadoSchema(BaseModel):
 
 
 class ActuacionSchema(BaseModel):
+    uuid: str
     codigo: int
     fecha: datetime
     tipo: str

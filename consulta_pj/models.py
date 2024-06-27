@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from tortoise import Tortoise, fields
-from tortoise.contrib.pydantic import pydantic_model_creator
+from tortoise import fields
 from tortoise.models import Model
 
 
@@ -30,9 +29,6 @@ class Causa(Model):
 class Movimiento(Model):
     idMovimientoJuicioIncidente = fields.IntField(primary_key=True)
     causa: fields.ForeignKeyRelation[Causa] = fields.ForeignKeyField("models.Causa", related_name="movimientos")
-    judicatura: fields.ForeignKeyRelation[Judicatura] = fields.ForeignKeyField(
-        "models.Judicatura", related_name="movimientos"
-    )
     incidentes: fields.ReverseRelation[Incidente]
 
 
@@ -79,7 +75,8 @@ class Implicado(Model):
 
 
 class Actuacion(Model):
-    codigo = fields.IntField(primary_key=True)
+    uuid = fields.CharField(max_length=64, primary_key=True)
+    codigo = fields.IntField()
     judicatura: fields.ForeignKeyRelation[Judicatura] = fields.ForeignKeyField(
         "models.Judicatura", related_name="actuaciones"
     )
@@ -90,9 +87,3 @@ class Actuacion(Model):
     tipo = fields.TextField()
     actividad = fields.TextField()
     nombreArchivo = fields.CharField(max_length=255, null=True)
-
-
-Tortoise.init_models(["consulta_pj.models"], "models")
-Causa_Pydantic = pydantic_model_creator(Causa)
-Movimiento_Pydantic = pydantic_model_creator(Movimiento)
-Actuacion_Pydantic = pydantic_model_creator(Actuacion)

@@ -39,15 +39,6 @@ async def get_actor_info(cedula: str, max_concurrency: int = 15) -> InformacionL
     return await get_litigante_info(litigante, causas_request, max_concurrency)
 
 
-async def get_demandados_info(cedulas_demandados: list[str], max_concurrency: int = 15) -> None:
-    tasks = (get_demandado_info(cedula) for cedula in cedulas_demandados)
-    tasks_with_progress = (
-        log_progress("Demandado", index, len(cedulas_demandados), task, level=logging.WARNING)
-        for index, task in enumerate(tasks)
-    )
-    await gather_with_concurrency(max_concurrency, tasks_with_progress)
-
-
 async def get_demandado_info(cedula: str, max_concurrency: int = 15) -> InformacionLitigante:
     litigante = LitiganteSchema(cedula=cedula, tipo=LitiganteTipo.DEMANDADO)
     causas_request = CausasRequest(demandado=CausaDemandado(cedulaDemandado=cedula))
@@ -64,7 +55,7 @@ async def get_litigante_info(
         total_causas = len(causas)
         tasks = ((causa.idJuicio, get_causa(causa, client)) for causa in causas)
         tasks_with_progress = (
-            log_progress(f"Actor {litigante.cedula} - Causa {idJuicio}", index, total_causas, task)
+            log_progress(f"Litigante {litigante.cedula} - Causa {idJuicio}", index, total_causas, task)
             for index, (idJuicio, task) in enumerate(tasks)
         )
         causas_info = await gather_with_concurrency(max_concurrency, tasks_with_progress)

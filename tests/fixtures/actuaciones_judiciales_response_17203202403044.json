@@ -1,0 +1,40 @@
+[
+    {
+        "codigo": 16070661,
+        "idJudicatura": "17203",
+        "idJuicio": "17203202403044 ",
+        "fecha": "2024-06-21T13:49:31.283+00:00",
+        "tipo": "ACTA DE SORTEO",
+        "actividad": "Recibido en la ciudad de Quito el día de hoy, viernes 21 de junio de 2024, a las 08:49,  el proceso  de Familia Mujer Niñez y Adolescencia, Tipo de procedimiento: Sumario por Asunto: Divorcio por causal, seguido  por: Robalino Ocaña Pablo Rafael, Magaly Elizabeth Montalvan Macas, en contra de: Cusco Echeverria Romel Mauricio. \n\nPor sorteo de ley la competencia se radica en la UNIDAD JUDICIAL DE FAMILIA, MUJER, NIÑEZ  y ADOLESCENCIA CON SEDE EN LA PARROQUIA MARISCAL SUCRE DEL DISTRITO METROPOLITANO DE QUITO, PROVINCIA DE PICHINCHA, conformado por Juez(a): Guzman Mejia Ketty Magaly. Secretaria(o): Gordillo Sahona Martha Azucena. \n\nProceso número: 17203-2024-03044 (1) Primera InstanciaAl que se adjunta los siguientes documentos:\n1) PETICIÓN INICIAL (ORIGINAL)\n2) RESOLUCIÓN DE JUICIO N° 1795220111244, PROCURACIÓN JUDICIAL. (COPIAS CERTIFICADAS/COMPULSA)\n3) CERTIFICADO DE MATRIMONIO (FIRMA DIGITAL), CERTIFICADO DE NACIMIENTO (FIRMA DIGITAL), CÉDULAS Y PAPELETAS DE VOTACIÓN, CREDENCIAL DE POLICÍA NACIONAL, CROQUIS Y FOTOGRAFÍA DE UBICACIÓN, CREDENCIALES DE ABOGADO. (COPIA SIMPLE)\n\nTotal de fojas: 24 ROSA IRENE ORTÍZ GARCIA Responsable de sorteo",
+        "visible": "S",
+        "origen": "RazonSorteo",
+        "idMovimientoJuicioIncidente": 26424934,
+        "ieTablaReferencia": "MovimientoJuicioIncidente",
+        "ieDocumentoAdjunto": "S",
+        "escapeOut": "true",
+        "uuid": "20240621-084958523274-593792259-1045161820",
+        "alias": "HBA01",
+        "nombreArchivo": "ACTA DE SORTEO_26424934",
+        "tipoIngreso": "AS",
+        "idTablaReferencia": "26424934"
+    },
+    {
+        "codigo": 159723048,
+        "idJudicatura": "17203",
+        "idJuicio": "17203202403044",
+        "fecha": "2024-06-21T13:49:30.000+00:00",
+        "tipo": "CARATULA DE JUICIO",
+        "actividad": "<b>CARATULA</b>",
+        "visible": "S",
+        "origen": "IndiceElectronico",
+        "idMovimientoJuicioIncidente": 26424934,
+        "ieTablaReferencia": "MovimientoJuicioIncidente",
+        "ieDocumentoAdjunto": "N",
+        "escapeOut": "false",
+        "uuid": "20240621-08495275103-593792259-1045161820",
+        "alias": "HBA01",
+        "nombreArchivo": "CARATULA DE JUICIO_26424934",
+        "tipoIngreso": "CJ",
+        "idTablaReferencia": "26424934"
+    }
+]
