@@ -1,0 +1,11 @@
+services:
+
+  backend:
+    build:
+      target: dev
+    working_dir: /jpdata_integrator
+    volumes:
+      - .:/jpdata_integrator
+    command: tail -f
+    healthcheck:
+      test: [ "CMD", "true" ]
