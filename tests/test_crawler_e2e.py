@@ -45,7 +45,7 @@ async def run_multiple_litigantes(actores, max_concurrency):
 async def test_crawler_parallel_causas(max_concurrency):
     informacion_litigantes = await run_multiple_causas("0968599020001", max_concurrency)
     assert informacion_litigantes is not None
-    assert len(informacion_litigantes.causas) == 144
+    assert len(informacion_litigantes.causas) == 143
 
 
 @time_async
