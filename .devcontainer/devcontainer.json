@@ -1,10 +1,11 @@
 {
-	"name": "prueba-tusdatos",
-	"build": {
-		"context": "..",
-		"dockerfile": "../Dockerfile",
-		"target": "dev"
-	},
+	"name": "JPData Integrator",
+	"dockerComposeFile": [
+		"../compose.yaml",
+		"./compose.yaml"
+	],
+	"service": "backend",
+	"workspaceFolder": "/jpdata_integrator",
 	"customizations": {
 		"vscode": {
 			"settings": {
@@ -15,8 +16,7 @@
 					"editor.formatOnSave": true,
 					"editor.codeActionsOnSave": {
 						"source.organizeImports": "explicit"
-					},
-					"editor.defaultFormatter": "charliermarsh.ruff"
+					}
 				},
 				"files.autoSave": "afterDelay",
 				"files.autoSaveDelay": 1000
@@ -25,7 +25,8 @@
 				"ms-python.python",
 				"mhutchie.git-graph",
 				"charliermarsh.ruff",
-				"tamasfe.even-better-toml"
+				"tamasfe.even-better-toml",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}
